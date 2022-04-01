@@ -59,3 +59,24 @@
 | *Postconditions* | - The calendar is refreshed to display the edits done to the activity. <br> - The database is updated to reflect the changes performed. |
 | *Normal flow* | 1. The student selects an activity to edit. <br> 2. The system displays the activity's attributes the user can edit. <br> 3. The student changes the values of the attributes. <br> 4. The student selects to save the changes made. <br> 5. The system saves and applies the edits, refreshing the calendar's display. <br> 6. The database is updated with the edits performed by the user.|
 | *Alternative flows and exceptions* | 1. [Discard changes] If, in step 6, the user doesn’t choose to save their edits, these are discarded and the activity retains its previous state. The calendar isn't refreshed and the database isn’t updated either.|
+
+## User Stories
+**Add an activity:**
+As a student, I want to customize my schedule so that I can organize my day by adding extra activities other than classes and exams.
+
+**Delete an activity:**
+As a student, I want to delete the information about an event, so that I can keep my schedule updated.
+
+**Edit an activity:**
+As a student, I want to edit the information about an event, so that I can keep my schedule updated.
+
+**Check activity:**
+As a student, I want to check my schedule, so that I can know my planned activities for a certain day.
+
+**Receive notifications:**
+As a student, I want to be notified before some of my activities, so I don’t miss any of my important appointments. 
+
+### Domain model
+<p align="center" justify="center">
+  <img src="https://github.com/LEIC-ES-2021-22/2LEIC13T3/blob/main/docs/Requirements/images/Domain Model.jpg>
+</p>
