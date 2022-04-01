@@ -78,5 +78,5 @@ As a student, I want to be notified before some of my activities, so I don’t m
 
 ### Domain model
 <p align="center" justify="center">
-  <img src="https://github.com/LEIC-ES-2021-22/2LEIC13T3/blob/main/docs/Requirements/images/Domain Model.jpg>
+  <img src="https://github.com/LEIC-ES-2021-22/2LEIC13T3/blob/main/docs/Requirements/images/DomainModel.jpg">
 </p>
