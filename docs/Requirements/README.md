@@ -21,6 +21,8 @@
 | *Normal flow* | 1. By default, the system shows all the activities for the current day. <br> 2. The system provides all the details of each activity (start/end time, category, frequency, etc).|
 | *Alternative flows and exceptions* | 1. [Alternative display mode] The user swipes left to see the plan for the other days of the week. If the user selects the ‘Next Week’ button, the system displays the schedule of the week following the one that was being displayed, starting on Monday.|
 
+<br>
+<br>
 
 **Add an Extra Activity**
 
@@ -34,6 +36,8 @@
 | *Normal flow* | 1. The student presses the ‘create new activity’ button. <br> 2. The system displays the attributes an event can be associated with. <br> 3. The student fills the activity fields with the correct information. <br> 4. The student presses the save button <br> 5. The system saves the new activity and refreshes the calendar. <br> 6. The database is updated with the new activity.|
 | *Alternative flows and exceptions* | 1. [Adding failure] If, in step 3, the hour of the new activity is the same as another that already exists, then it is not possible to add that activity and a warning is showcased. <br> 2. [Optional attributes] In step 4, the student may also enable notifications for the new event, setting how much time before it the notification should be received, and/or set a color label for the activity.|
 
+<br>
+<br>
 
 **Delete an Activity**
 
@@ -46,6 +50,9 @@
 | *Postconditions* | - The calendar is updated and so is the database. |
 | *Normal flow* | 1. The student has the option to select an event. <br> 2. The system displays the attributes an event can be associated with. <br> 3. The student has the option to delete the event. <br> 4. The system removes the activity from the schedule and refreshes the calendar. <br> 5. The deleted activity is removed from the database.|
 | *Alternative flows and exceptions* | 1. [Activities with more than one occurence] The system asks if the student wants to delete only that occurrence or all future occurrences. <br> 2. [Class/Exam Deletion] If, in step 6, the activity is either a university class or exam, it’s not really removed from the database but it becomes hidden.|
+
+<br>
+<br>
 
 
 **Edit an Extra Activity**
@@ -60,21 +67,9 @@
 | *Normal flow* | 1. The student selects an activity to edit. <br> 2. The system displays the activity's attributes the user can edit. <br> 3. The student changes the values of the attributes. <br> 4. The student selects to save the changes made. <br> 5. The system saves and applies the edits, refreshing the calendar's display. <br> 6. The database is updated with the edits performed by the user.|
 | *Alternative flows and exceptions* | 1. [Discard changes] If, in step 6, the user doesn’t choose to save their edits, these are discarded and the activity retains its previous state. The calendar isn't refreshed and the database isn’t updated either.|
 
-## User Stories
-**Add an activity:**
-As a student, I want to customize my schedule so that I can organize my day by adding extra activities other than classes and exams.
-
-**Delete an activity:**
-As a student, I want to delete the information about an event, so that I can keep my schedule updated.
-
-**Edit an activity:**
-As a student, I want to edit the information about an event, so that I can keep my schedule updated.
-
-**Check activity:**
-As a student, I want to check my schedule, so that I can know my planned activities for a certain day.
-
-**Receive notifications:**
-As a student, I want to be notified before some of my activities, so I don’t miss any of my important appointments. 
+<br>
+<br>
+<br>
 
 ### Domain model
 <p align="center" justify="center">
