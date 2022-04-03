@@ -69,6 +69,22 @@
 
 <br>
 <br>
+
+
+**Receive Notifications**
+|||
+| --- | --- |
+| *Name* | Receive notifications |
+| *Actor* |  FEUP student | 
+| *Description* | Receive notifications before an event. |
+| *Preconditions* | - The student must be a FEUP student. <br> - The student should be logged-in and on the ‘Agenda’ page. <br> - The student must have an internet connection. <br> - - The student has previously enabled notifications for the event |
+| *Postconditions* | |
+| *Normal flow* | 1. The system sends a notification with the information about the activity that will occur soon. |
+| *Alternative flows and exceptions* | |
+
+
+<br>
+<br>
 <br>
 
 ### Domain model
