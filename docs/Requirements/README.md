@@ -39,17 +39,17 @@
 <br>
 <br>
 
-**Delete an Activity**
+**Delete/Hide an Activity**
 
 |||
 | --- | --- |
-| *Name* | Delete an activity |
+| *Name* | Delete or Hide an activity |
 | *Actor* |  FEUP student | 
-| *Description* | The student has the option to delete any activity. |
+| *Description* | The student has the option to delete any extra activity and hide classes and exams. |
 | *Preconditions* | - The user must be a FEUP student. <br> - The student should be logged-in and on the ‘Agenda’ page. <br> - The student must have an internet connection.|
 | *Postconditions* | - The calendar is updated and so is the database. |
-| *Normal flow* | 1. The student has the option to select an event. <br> 2. The system displays the attributes an event can be associated with. <br> 3. The student has the option to delete the event. <br> 4. The system removes the activity from the schedule and refreshes the calendar. <br> 5. The deleted activity is removed from the database.|
-| *Alternative flows and exceptions* | 1. [Activities with more than one occurence] The system asks if the student wants to delete only that occurrence or all future occurrences. <br> 2. [Class/Exam Deletion] If, in step 6, the activity is either a university class or exam, it’s not really removed from the database but it becomes hidden.|
+| *Normal flow* | 1. The student has the option to select an event. <br> 2. The student has the option to delete the event. <br> 3. The system removes the activity from the schedule and refreshes the calendar. <br> 4. The deleted activity is removed from the database.|
+| *Alternative flows and exceptions* | 1. [Activities with more than one occurence] The system asks if the student wants to delete only that occurrence or all future occurrences. <br> 2. [Class/Exam Deletion] If, in step 2, the activity is either a university class or exam, it’s not really removed from the database but it becomes hidden.|
 
 <br>
 <br>
@@ -77,7 +77,7 @@
 | *Name* | Receive notifications |
 | *Actor* |  FEUP student | 
 | *Description* | Receive notifications before an event. |
-| *Preconditions* | - The student must be a FEUP student. <br> - The student should be logged-in and on the ‘Agenda’ page. <br> - The student must have an internet connection. <br> - - The student has previously enabled notifications for the event |
+| *Preconditions* | - The student must be a FEUP student. <br> - The student should be logged-in and on the ‘Agenda’ page. <br> - The student must have an internet connection. <br> - The student has previously enabled notifications for the event |
 | *Postconditions* | |
 | *Normal flow* | 1. The system sends a notification with the information about the activity that will occur soon. |
 | *Alternative flows and exceptions* | |
