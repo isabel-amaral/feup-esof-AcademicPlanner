@@ -17,7 +17,7 @@
 | *Actor* |  FEUP student | 
 | *Description* | Check planned activities for a certain day in a certain week.  |
 | *Preconditions* | - The student must be a FEUP student. <br> - The student should be logged-in and on the ‘Agenda’ page. <br> - The student must have an internet connection. |
-| *Postconditions* |  |
+| *Postconditions* | - The schedule is displayed on the screen. |
 | *Normal flow* | 1. By default, the system shows all the activities for the current day. <br> 2. The system provides all the details of each activity (start/end time, category, frequency, etc).|
 | *Alternative flows and exceptions* | 1. [Alternative display mode] The user swipes left to see the plan for the other days of the week. If the user selects the ‘Next Week’ button, the system displays the schedule of the week following the one that was being displayed, starting on Monday.|
 
