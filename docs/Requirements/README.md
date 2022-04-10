@@ -3,7 +3,7 @@
 ### Use case model
 
 <p align="center" justify="center">
-  <img src="https://github.com/LEIC-ES-2021-22/2LEIC13T3/blob/main/docs/Requirements/images/UseCaseModel.drawio.jpg"/>
+  <img src="https://github.com/LEIC-ES-2021-22/2LEIC13T3/blob/main/docs/Requirements/images/UseCaseModel.drawio.png"/>
 </p>
 <br>
 <br>
