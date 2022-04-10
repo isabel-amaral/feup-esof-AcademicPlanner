@@ -19,9 +19,10 @@ The calendar updating logics must communicate with the Sigarra Api, which is an 
 <br><br>
 
 ### Physical Architecture
-Our app’s physical architecture features two entities. The user smartphone, where the app will be installed and the server, where all the information that allows the app to run will be stored.
+Our app’s physical architecture features three entities. The user smartphone, where the app will be installed, the server, where all the information that allows the app to run will be stored and the Sigarra API, where the information concerning the student’s exams and classes will be fetched from everytime the student logs in.
 
 Regarding the technologies, we will be using flutter because it already is the framework used in uni and is quite easy to learn. We will be using sqlite as well because of its simplicity and, given the fact we only need it to store small pieces of information that cannot be obtained directly from sigarra (information about the extra activities created by the user), it’s more than enough for our needs.
+
 
 
 ![DeploymentView](images/PhysicalView.jpg)
