@@ -7,6 +7,8 @@ import 'package:uni/view/Widgets/page_title.dart';
 class CalendarPageView extends StatelessWidget {
   final List<Exam> exams;
   final List<Lecture> lectures;
+  final DateTime startDate;
+  final DateTime endDate;
   final List<String> daysOfTheWeek;
   final TabController tabController;
   final ScrollController scrollViewController;
@@ -15,6 +17,8 @@ class CalendarPageView extends StatelessWidget {
       {Key key,
         @required this.exams,
         @required this.lectures,
+        @required this.startDate,
+        @required this.endDate,
         @required this.daysOfTheWeek,
         @required this.tabController,
         this.scrollViewController});
@@ -47,14 +51,26 @@ class CalendarPageView extends StatelessWidget {
     );
   }
 
-  createTabs(MediaQueryData queryData, BuildContext context) {
+  List<Widget> createTabs(MediaQueryData queryData, BuildContext context) {
     final List<Widget> tabs = <Widget>[];
-    for (var i = 0; i < daysOfTheWeek.length; i++) {
+
+    final DateTime nextWeek = startDate.add(Duration(days: 7));
+    DateTime currentDay = startDate;
+    while (currentDay != nextWeek) {
       tabs.add(Container(
         color: Theme.of(context).backgroundColor,
         width: queryData.size.width * 1 / 3,
-        child: Tab(key: Key('schedule-page-tab-$i'), text: daysOfTheWeek[i]),
-      ));
+        child: Tab(
+            key: Key('calendar-page-tab-$currentDay'),
+            child: Column(
+                children: [
+                  Text(daysOfTheWeek[currentDay.weekday-1]),
+                  Text(currentDay.day.toString() + '/' + currentDay.month.toString())
+                ])
+        ),
+      )
+      );
+      currentDay = currentDay.add(Duration(days: 1));
     }
     return tabs;
   }

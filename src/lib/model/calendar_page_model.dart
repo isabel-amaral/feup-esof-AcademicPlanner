@@ -43,7 +43,7 @@ class _CalendarPageState extends SecondaryPageViewState
     final limitedLectures = <Lecture>[];
 
     for (Lecture lecture in lectures) {
-      if (lecture.day < daysOfTheWeek.length) {
+      if (lecture.day < 5) {
         limitedLectures.add(lecture);
       }
     }
@@ -67,7 +67,7 @@ class _CalendarPageState extends SecondaryPageViewState
   void initState() {
     super.initState();
     tabController = TabController(vsync: this, length: daysOfTheWeek.length);
-    final offset = (weekDay > 5) ? 0 : (weekDay - 1) % daysOfTheWeek.length;
+    final offset = (weekDay > 5) ? 0 : (weekDay - 1) % 5;
     tabController.animateTo((tabController.index + offset));
   }
 
@@ -100,6 +100,8 @@ class _CalendarPageState extends SecondaryPageViewState
             exams: activities.item1,
             lectures: activities.item2,
             daysOfTheWeek: daysOfTheWeek,
+            startDate: startDate,
+            endDate: endDate,
             tabController: tabController,
             scrollViewController: scrollViewController);
       },
