@@ -29,11 +29,11 @@ class _CalendarPageState extends SecondaryPageViewState
   DateTime startDate = DateTime(2022, 4, 18);
   DateTime endDate = DateTime(2022, 4, 24);
   final List<String> daysOfTheWeek = [
-    'Segunda-feira',
-    'Terça-feira',
-    'Quarta-feira',
-    'Quinta-feira',
-    'Sexta-feira',
+    'Segunda',
+    'Terça',
+    'Quarta',
+    'Quinta',
+    'Sexta',
     'Sábado',
     'Domingo'
   ];
