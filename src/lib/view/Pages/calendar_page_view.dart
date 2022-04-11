@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:uni/model/entities/exam.dart';
 import 'package:uni/model/entities/lecture.dart';
 import 'package:uni/view/Widgets/page_title.dart';
+import 'package:uni/view/Widgets/schedule_slot.dart';
 
 
 class CalendarPageView extends StatelessWidget {
@@ -44,8 +45,14 @@ class CalendarPageView extends StatelessWidget {
               indicatorColor: Theme.of(context).primaryColor,
               labelPadding: EdgeInsets.all(0.0),
               tabs: createTabs(queryData, context),
-            ),
-          ],
+            )
+          ]
+        ),
+        Expanded(
+          child: TabBarView(
+          controller: tabController,
+          children: createSchedule(context),
+          ),
         )
       ],
     );
@@ -73,5 +80,40 @@ class CalendarPageView extends StatelessWidget {
       currentDay = currentDay.add(Duration(days: 1));
     }
     return tabs;
+  }
+
+  List<Widget> createSchedule(BuildContext context) {
+    final List<Widget> tabBarViewContent = [];
+    for (int i = 0; i < daysOfTheWeek.length; i++) {
+      tabBarViewContent.add(createDailySchedule(context, i));
+    }
+    return tabBarViewContent;
+  }
+
+  Widget createDailySchedule(BuildContext context, int i) {
+    final List<Widget> dailyActivities = [];
+    /*
+    for (Exam exam in exams) {
+      if (exam.weekDay == daysOfTheWeek[i]) {
+        dailyActivities.add();
+      }
+    }*/
+    for (Lecture lecture in lectures) {
+      if (lecture.day == i) {
+        dailyActivities.add(ScheduleSlot(
+            subject: lecture.subject,
+            typeClass: lecture.typeClass,
+            rooms: lecture.room,
+            begin: lecture.startTime,
+            end: lecture.endTime,
+            teacher: lecture.teacher,
+            classNumber: lecture.classNumber));
+      }
+    }
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: dailyActivities
+    );
   }
 }
