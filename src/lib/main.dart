@@ -5,6 +5,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:uni/controller/middleware.dart';
 import 'package:uni/model/app_state.dart';
+import 'package:uni/model/calendar_page_model.dart';
 import 'package:uni/redux/actions.dart';
 import 'package:uni/redux/reducers.dart';
 import 'package:uni/view/Pages/about_page_view.dart';
@@ -67,6 +68,9 @@ class MyAppState extends State<MyApp> {
               case '/' + Constants.navPersonalArea:
                 return PageTransition.makePageTransition(
                     page: HomePageView(), settings: settings);
+              case '/' + Constants.navCalendar:
+                return PageTransition.makePageTransition(
+                  page: CalendarPage(), settings: settings);
               case '/' + Constants.navSchedule:
                 return PageTransition.makePageTransition(
                     page: SchedulePage(), settings: settings);
