@@ -16,3 +16,4 @@
 
 - **Logical Architecture**
 - **Physical Architecture**
+- **Vertical Prototype**
