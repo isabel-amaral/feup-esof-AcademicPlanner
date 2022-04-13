@@ -44,6 +44,6 @@ and our physical architecture:
 and were able to have a first contact with flutter, the main technology being used for this project.
 
 
-Bellow is a small clip showing what was achieved in this stage.
+Bellow is a small clip showing what was achieved in this stage. Aditionally, an apk was generated and can be found [here](https://github.com/LEIC-ES-2021-22/2LEIC13T3/tree/main/release).
 
 https://user-images.githubusercontent.com/80794891/162967652-44d9382c-9f8e-4e1e-ad41-311fdaa21d5e.mp4
