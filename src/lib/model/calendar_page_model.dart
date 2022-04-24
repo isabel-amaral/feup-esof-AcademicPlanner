@@ -21,11 +21,8 @@ class _CalendarPageState extends SecondaryPageViewState
   TabController tabController;
   ScrollController scrollViewController;
 
-  /* These hardcoded values were inserted temporarily
-  only to show a first implementation of the display
-  before the calendar is set up to show every day in the school year
-  this particular week was chosen because it allows the display of both
-  classes and several exams */
+  /* startDate and endDate are the dates at which the school year begins/ends */
+  //In the future these might have to be passed to CalendarPageView
   DateTime startDate = DateTime(2021, 10, 18);
   DateTime endDate = DateTime(2021, 7, 16);
   DateTime weekStartDate;
@@ -60,6 +57,7 @@ class _CalendarPageState extends SecondaryPageViewState
 
   /// Limits exmas to the week in display -
   /// right now hardcoded values are being used
+  // In the future we might need to change the logic of this method
   List<Exam> limitExams(exams) {
     final limitedExams = <Exam>[];
 
