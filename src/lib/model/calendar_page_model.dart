@@ -26,8 +26,10 @@ class _CalendarPageState extends SecondaryPageViewState
   before the calendar is set up to show every day in the school year
   this particular week was chosen because it allows the display of both
   classes and several exams */
-  DateTime startDate = DateTime(2022, 4, 18);
-  DateTime endDate = DateTime(2022, 4, 24);
+  DateTime startDate = DateTime(2021, 10, 18);
+  DateTime endDate = DateTime(2021, 7, 16);
+  DateTime weekStartDate;
+  DateTime weekEndDate;
   final List<String> daysOfTheWeek = [
     'Segunda',
     'Terça',
@@ -37,6 +39,12 @@ class _CalendarPageState extends SecondaryPageViewState
     'Sábado',
     'Domingo'
   ];
+
+  void getCurrentWeek() {
+    final DateTime currentDay = DateTime.now();
+    weekStartDate = currentDay.add(Duration (days: - (currentDay.weekday - 1)));
+    weekEndDate = weekStartDate.add(Duration (days: 6));
+  }
 
   /// Limits lectures to one week
   List<Lecture> limitLectures(lectures) {
@@ -81,6 +89,8 @@ class _CalendarPageState extends SecondaryPageViewState
   Widget getBody(BuildContext context) {
     return StoreConnector<AppState, Tuple2<List<Exam>, List<Lecture>>>(
       converter: (store) {
+        getCurrentWeek();
+
         final List<Exam> exams = store.state.content['exams'];
         final Map<String, bool> filteredExamTypes =
         store.state.content['filteredExams'];
