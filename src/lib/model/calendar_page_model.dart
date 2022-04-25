@@ -108,8 +108,8 @@ class _CalendarPageState extends SecondaryPageViewState
             exams: activities.item1,
             lectures: activities.item2,
             daysOfTheWeek: daysOfTheWeek,
-            startDate: startDate,
-            endDate: endDate,
+            startDate: weekStartDate,
+            endDate: weekEndDate,
             tabController: tabController,
             scrollViewController: scrollViewController);
       },
