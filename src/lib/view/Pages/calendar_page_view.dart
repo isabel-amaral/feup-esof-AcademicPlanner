@@ -29,7 +29,6 @@ class CalendarPageView extends StatelessWidget {
   Widget build(BuildContext context) {
     final MediaQueryData queryData = MediaQuery.of(context);
     final Color labelColor = Color.fromARGB(255, 0x50, 0x50, 0x50);
-
     return Column(
       children: [
         ListView(
@@ -54,7 +53,22 @@ class CalendarPageView extends StatelessWidget {
           controller: tabController,
           children: createSchedule(context),
           ),
-        )
+        ),
+        Align (
+          alignment: Alignment.bottomRight,
+          child: ElevatedButton(
+                  child: Icon(
+                  Icons.edit,
+                  color: Theme.of(context).primaryColor,
+                ),
+                style: ElevatedButton.styleFrom(
+                  shape: CircleBorder(),
+                  padding: EdgeInsets.all(8.0),
+                  primary: Colors.white,
+                ),
+                onPressed: () {  },
+              ),
+          ),
       ],
     );
   }
