@@ -30,15 +30,6 @@ class CalendarPageView extends StatelessWidget {
   Widget build(BuildContext context) {
     final MediaQueryData queryData = MediaQuery.of(context);
     final Color labelColor = Color.fromARGB(255, 0x50, 0x50, 0x50);
-    final shape = RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(60),
-    );
-    final ButtonStyle style = ElevatedButton.styleFrom(
-      textStyle: const TextStyle(fontSize: 14),
-      shape: shape,
-      primary: primaryColor,
-      onPrimary: Colors.white,
-    );
 
     return Column(
       children: [
@@ -47,28 +38,7 @@ class CalendarPageView extends StatelessWidget {
           shrinkWrap: true,
           children: [
             PageTitle(name: 'Agenda'),
-            Container(
-              padding: const EdgeInsets.fromLTRB(5, 0, 5, 10),
-              child:
-                Row(
-                  mainAxisSize:MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ElevatedButton.icon(
-                      label: Text('Semana Anterior'),
-                      icon: Icon(Icons.arrow_back_ios),
-                      style: style,
-                      onPressed: () {/*TODO: issue #10 */ }
-                    ),
-                    ElevatedButton.icon(
-                      icon: Text('Semana Seguinte'),
-                      label: Icon(Icons.arrow_forward_ios),
-                      style: style,
-                      onPressed: () {/*TODO: issue #10 */ }
-                    )
-                  ]
-                )
-            ),
+            weekDisplayButtons(),
             TabBar(
               controller: tabController,
               unselectedLabelColor: labelColor,
@@ -151,6 +121,41 @@ class CalendarPageView extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: dailyActivities
+    );
+  }
+
+  Widget weekDisplayButtons(){
+    final shape = RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(60),
+    );
+    final ButtonStyle style = ElevatedButton.styleFrom(
+      textStyle: const TextStyle(fontSize: 14),
+      shape: shape,
+      primary: primaryColor,
+      onPrimary: Colors.white,
+    );
+
+    return Container(
+        padding: const EdgeInsets.fromLTRB(5, 0, 5, 10),
+        child:
+          Row(
+              mainAxisSize:MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton.icon(
+                    label: Text('Semana Anterior'),
+                    icon: Icon(Icons.arrow_back_ios),
+                    style: style,
+                    onPressed: () {/*TODO: issue #10 */ }
+                ),
+                ElevatedButton.icon(
+                    icon: Text('Semana Seguinte'),
+                    label: Icon(Icons.arrow_forward_ios),
+                    style: style,
+                    onPressed: () {/*TODO: issue #10 */ }
+                )
+              ]
+          )
     );
   }
 }
