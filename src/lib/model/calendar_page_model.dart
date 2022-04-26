@@ -73,7 +73,7 @@ class _CalendarPageState extends SecondaryPageViewState
   void initState() {
     super.initState();
     tabController = TabController(vsync: this, length: daysOfTheWeek.length);
-    final offset = (weekDay > 5) ? 0 : (weekDay - 1) % 5;
+    final offset = (weekDay > 7) ? 0 : (weekDay - 1) % 7;
     tabController.animateTo((tabController.index + offset));
   }
 
