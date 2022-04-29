@@ -70,7 +70,45 @@ class CalendarPageView extends StatelessWidget {
                   elevation: 10
                 ),
                 onPressed: () {
-                  
+                  showDialog(context: context, builder: (BuildContext context){
+                    return AlertDialog(
+                      content:
+                        Column(
+                          children: [
+                            ElevatedButton.icon(
+                              label: Icon(Icons.edit, color: Theme.of(context).primaryColor),
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(60)),
+                                    padding: EdgeInsets.all(8.0),
+                                    primary: Colors.black,
+                                    elevation: 10
+                                ),
+                              icon: Text('Editar Evento')
+                            ),
+                            ElevatedButton.icon(
+                                label: Icon(Icons.remove, color: Theme.of(context).primaryColor),
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(60)),
+                                    padding: EdgeInsets.all(8.0),
+                                    primary: Colors.white,
+                                    elevation: 10
+                                ),
+                                icon: Text('Alterar Visibilidade')
+                            ),
+                            ElevatedButton.icon(
+                                label: Icon(Icons.add, color: Theme.of(context).primaryColor),
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(60)),
+                                    padding: EdgeInsets.all(8.0),
+                                    primary: Colors.white,
+                                    elevation: 10
+                                ),
+                                icon: Text('Adicionar Evento')
+                            ),
+                          ],
+                        ),
+                    );
+                  });
                 },
               ),
             ),
