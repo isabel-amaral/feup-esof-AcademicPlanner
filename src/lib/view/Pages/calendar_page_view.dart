@@ -54,10 +54,12 @@ class CalendarPageView extends StatelessWidget {
           children: createSchedule(context),
           ),
         ),
-        Align (
-          alignment: Alignment.bottomRight,
-          child: ElevatedButton(
-                  child: Icon(
+        Container(
+          padding: EdgeInsets.all(10),
+            child: Align (
+              alignment: Alignment.bottomRight,
+              child: ElevatedButton(
+                child: Icon(
                   Icons.edit,
                   color: Theme.of(context).primaryColor,
                 ),
@@ -65,10 +67,14 @@ class CalendarPageView extends StatelessWidget {
                   shape: CircleBorder(),
                   padding: EdgeInsets.all(8.0),
                   primary: Colors.white,
+                  elevation: 10
                 ),
-                onPressed: () {  },
+                onPressed: () {
+                  
+                },
               ),
-          ),
+            ),
+        ),
       ],
     );
   }
