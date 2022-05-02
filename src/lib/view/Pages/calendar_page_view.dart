@@ -38,7 +38,7 @@ class CalendarPageView extends StatelessWidget {
           shrinkWrap: true,
           children: [
             PageTitle(name: 'Agenda'),
-            weekDisplayButtons(),
+            weekDisplayButtons(context),
             TabBar(
               controller: tabController,
               unselectedLabelColor: labelColor,
@@ -124,15 +124,15 @@ class CalendarPageView extends StatelessWidget {
     );
   }
 
-  Widget weekDisplayButtons(){
+  Widget weekDisplayButtons(BuildContext context){
     final shape = RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(60),
     );
     final ButtonStyle style = ElevatedButton.styleFrom(
       textStyle: const TextStyle(fontSize: 14),
       shape: shape,
-      primary: primaryColor,
-      onPrimary: Colors.white,
+      primary: Theme.of(context).primaryColor,
+      onPrimary: Theme.of(context).hintColor,
     );
 
     return Container(
