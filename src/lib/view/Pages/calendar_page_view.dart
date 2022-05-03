@@ -4,6 +4,7 @@ import 'package:uni/model/entities/lecture.dart';
 import 'package:uni/view/Widgets/page_title.dart';
 import 'package:uni/view/Widgets/schedule_row.dart';
 import 'package:uni/view/Widgets/schedule_slot.dart';
+import 'package:uni/view/Widgets/week_display_buttons.dart';
 import 'package:uni/view/theme.dart';
 
 
@@ -38,7 +39,7 @@ class CalendarPageView extends StatelessWidget {
           shrinkWrap: true,
           children: [
             PageTitle(name: 'Agenda'),
-            weekDisplayButtons(context),
+            WeekDisplayButtons(),
             TabBar(
               controller: tabController,
               unselectedLabelColor: labelColor,
@@ -121,47 +122,6 @@ class CalendarPageView extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: dailyActivities
-    );
-  }
-
-  Widget weekDisplayButtons(BuildContext context){
-    final shape = RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(60),
-    );
-    final ButtonStyle style = ElevatedButton.styleFrom(
-      textStyle: const TextStyle(fontSize: 14),
-      shape: shape,
-      primary: Theme.of(context).primaryColor,
-      onPrimary: Theme.of(context).hintColor,
-    );
-
-    return Container(
-        padding: const EdgeInsets.fromLTRB(5, 0, 5, 10),
-        child:
-          Row(
-              mainAxisSize:MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(0.0),
-                  child: ElevatedButton.icon(
-                      label: Text('Semana Anterior'),
-                      icon: Icon(Icons.navigate_before),
-                      style: style,
-                      onPressed: () {/*TODO: issue #10 */ }
-                  )
-                ),
-                Padding(
-                  padding: EdgeInsets.all(0.0),
-                  child: ElevatedButton.icon(
-                      icon: Text('Semana Seguinte'),
-                      label: Icon(Icons.navigate_next),
-                      style: style,
-                      onPressed: () {/*TODO: issue #10 */ }
-                  )
-                )
-              ]
-          )
     );
   }
 }
