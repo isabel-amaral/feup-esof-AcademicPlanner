@@ -5,7 +5,6 @@ import 'package:uni/view/Widgets/page_title.dart';
 import 'package:uni/view/Widgets/schedule_row.dart';
 import 'package:uni/view/Widgets/schedule_slot.dart';
 import 'package:uni/view/Widgets/week_display_buttons.dart';
-import 'package:uni/view/theme.dart';
 
 
 class CalendarPageView extends StatelessWidget {

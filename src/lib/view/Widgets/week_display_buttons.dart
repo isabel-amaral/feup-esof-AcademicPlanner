@@ -21,24 +21,18 @@ class WeekDisplayButtons extends StatelessWidget {
             mainAxisSize:MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Padding(
-                  padding: EdgeInsets.all(0.0),
-                  child: ElevatedButton.icon(
-                      label: Text('Semana Anterior'),
-                      icon: Icon(Icons.navigate_before),
-                      style: style,
-                      onPressed: () {/*TODO: issue #10 */ }
-                  )
-              ),
-              Padding(
-                  padding: EdgeInsets.all(0.0),
-                  child: ElevatedButton.icon(
-                      icon: Text('Semana Seguinte'),
-                      label: Icon(Icons.navigate_next),
-                      style: style,
-                      onPressed: () {/*TODO: issue #10 */ }
-                  )
-              )
+               ElevatedButton.icon(
+                   label: Text('Semana Anterior'),
+                   icon: Icon(Icons.navigate_before),
+                   style: style,
+                   onPressed: () {/*TODO: issue #10 */ }
+               ),
+               ElevatedButton.icon(
+                   icon: Text('Semana Seguinte'),
+                   label: Icon(Icons.navigate_next),
+                   style: style,
+                   onPressed: () {/*TODO: issue #10 */ }
+               )
             ]
         )
     );
