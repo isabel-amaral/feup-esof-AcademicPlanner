@@ -4,6 +4,7 @@ import 'package:uni/model/entities/lecture.dart';
 import 'package:uni/view/Widgets/page_title.dart';
 import 'package:uni/view/Widgets/schedule_row.dart';
 import 'package:uni/view/Widgets/schedule_slot.dart';
+import 'package:uni/view/Widgets/week_display_buttons.dart';
 
 
 class CalendarPageView extends StatelessWidget {
@@ -37,6 +38,7 @@ class CalendarPageView extends StatelessWidget {
           shrinkWrap: true,
           children: [
             PageTitle(name: 'Agenda'),
+            WeekDisplayButtons(),
             TabBar(
               controller: tabController,
               unselectedLabelColor: labelColor,
