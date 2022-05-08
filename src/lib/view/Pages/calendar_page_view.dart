@@ -68,15 +68,31 @@ class CalendarPageView extends StatelessWidget {
     DateTime currentDay = startDate;
     while (currentDay != nextWeek) {
       tabs.add(Container(
-        color: Theme.of(context).backgroundColor,
         width: queryData.size.width * 1 / 3,
+        decoration: BoxDecoration(
+          color: Theme.of(context).backgroundColor,
+          border: Border(
+            bottom: BorderSide(
+              width: 0.7,
+              color: Theme.of(context).primaryColor
+            )
+          )
+        ),
         child: Tab(
-            key: Key('calendar-page-tab-$currentDay'),
-            child: Column(
-                children: [
-                  Text(daysOfTheWeek[currentDay.weekday-1]),
-                  Text(currentDay.day.toString() + '/' + currentDay.month.toString())
-                ])
+          key: Key('calendar-page-tab-$currentDay'),
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
+                child: Text(daysOfTheWeek[currentDay.weekday-1],
+                  style: TextStyle(fontWeight: FontWeight.bold))
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
+                child: Text(currentDay.day.toString() + '/' + currentDay.month.toString()),
+              )
+            ]
+          )
         ),
       )
       );
@@ -118,6 +134,14 @@ class CalendarPageView extends StatelessWidget {
       }
     }
 
+    if (dailyActivities.isEmpty) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Não existem atividades', style: TextStyle(fontSize: 17))
+        ],
+      );
+    }
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: dailyActivities

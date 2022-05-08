@@ -21,13 +21,12 @@ class _CalendarPageState extends SecondaryPageViewState
   TabController tabController;
   ScrollController scrollViewController;
 
-  /* These hardcoded values were inserted temporarily
-  only to show a first implementation of the display
-  before the calendar is set up to show every day in the school year
-  this particular week was chosen because it allows the display of both
-  classes and several exams */
-  DateTime startDate = DateTime(2022, 4, 18);
-  DateTime endDate = DateTime(2022, 4, 24);
+  /* startDate and endDate are the dates at which the school year begins/ends */
+  //In the future these might have to be passed to CalendarPageView
+  DateTime startDate = DateTime(2021, 10, 18);
+  DateTime endDate = DateTime(2021, 7, 16);
+  DateTime weekStartDate;
+  DateTime weekEndDate;
   final List<String> daysOfTheWeek = [
     'Segunda',
     'Terça',
@@ -37,6 +36,12 @@ class _CalendarPageState extends SecondaryPageViewState
     'Sábado',
     'Domingo'
   ];
+
+  void getCurrentWeek() {
+    final DateTime currentDay = DateTime.now();
+    weekStartDate = currentDay.add(Duration (days: - (currentDay.weekday - 1)));
+    weekEndDate = weekStartDate.add(Duration (days: 6));
+  }
 
   /// Limits lectures to one week
   List<Lecture> limitLectures(lectures) {
@@ -52,6 +57,7 @@ class _CalendarPageState extends SecondaryPageViewState
 
   /// Limits exmas to the week in display -
   /// right now hardcoded values are being used
+  // In the future we might need to change the logic of this method
   List<Exam> limitExams(exams) {
     final limitedExams = <Exam>[];
 
@@ -67,7 +73,7 @@ class _CalendarPageState extends SecondaryPageViewState
   void initState() {
     super.initState();
     tabController = TabController(vsync: this, length: daysOfTheWeek.length);
-    final offset = (weekDay > 5) ? 0 : (weekDay - 1) % 5;
+    final offset = (weekDay > 7) ? 0 : (weekDay - 1) % 7;
     tabController.animateTo((tabController.index + offset));
   }
 
@@ -81,6 +87,8 @@ class _CalendarPageState extends SecondaryPageViewState
   Widget getBody(BuildContext context) {
     return StoreConnector<AppState, Tuple2<List<Exam>, List<Lecture>>>(
       converter: (store) {
+        getCurrentWeek();
+
         final List<Exam> exams = store.state.content['exams'];
         final Map<String, bool> filteredExamTypes =
         store.state.content['filteredExams'];
@@ -100,8 +108,8 @@ class _CalendarPageState extends SecondaryPageViewState
             exams: activities.item1,
             lectures: activities.item2,
             daysOfTheWeek: daysOfTheWeek,
-            startDate: startDate,
-            endDate: endDate,
+            startDate: weekStartDate,
+            endDate: weekEndDate,
             tabController: tabController,
             scrollViewController: scrollViewController);
       },
