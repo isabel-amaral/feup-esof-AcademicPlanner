@@ -71,7 +71,7 @@ class CalendarPageView extends StatelessWidget {
           color: Theme.of(context).backgroundColor,
           border: Border(
             bottom: BorderSide(
-              width: 0.5,
+              width: 0.7,
               color: Theme.of(context).primaryColor
             )
           )
