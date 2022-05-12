@@ -5,7 +5,6 @@ import 'package:uni/view/Widgets/page_title.dart';
 import 'package:uni/view/Widgets/schedule_row.dart';
 import 'package:uni/view/Widgets/schedule_slot.dart';
 
-
 class CalendarPageView extends StatelessWidget {
   final List<Exam> exams;
   final List<Lecture> lectures;
@@ -17,104 +16,42 @@ class CalendarPageView extends StatelessWidget {
 
   CalendarPageView(
       {Key key,
-        @required this.exams,
-        @required this.lectures,
-        @required this.startDate,
-        @required this.endDate,
-        @required this.daysOfTheWeek,
-        @required this.tabController,
-        this.scrollViewController});
+      @required this.exams,
+      @required this.lectures,
+      @required this.startDate,
+      @required this.endDate,
+      @required this.daysOfTheWeek,
+      @required this.tabController,
+      this.scrollViewController});
 
   @override
   Widget build(BuildContext context) {
     final MediaQueryData queryData = MediaQuery.of(context);
     final Color labelColor = Color.fromARGB(255, 0x50, 0x50, 0x50);
-    return Column(
-      children: [
-        ListView(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          children: [
-            PageTitle(name: 'Agenda'),
-            TabBar(
-              controller: tabController,
-              unselectedLabelColor: labelColor,
-              labelColor: labelColor,
-              isScrollable: true,
-              indicatorWeight: 3.0,
-              indicatorColor: Theme.of(context).primaryColor,
-              labelPadding: EdgeInsets.all(0.0),
-              tabs: createTabs(queryData, context),
-            )
-          ]
-        ),
-        Expanded(
-          child: TabBarView(
+    return Column(children: [
+      ListView(scrollDirection: Axis.vertical, shrinkWrap: true, children: [
+        PageTitle(name: 'Agenda'),
+        TabBar(
+          controller: tabController,
+          unselectedLabelColor: labelColor,
+          labelColor: labelColor,
+          isScrollable: true,
+          indicatorWeight: 3.0,
+          indicatorColor: Theme.of(context).primaryColor,
+          labelPadding: EdgeInsets.all(0.0),
+          tabs: createTabs(queryData, context),
+        )
+      ]),
+      Expanded(
+        child: TabBarView(
           controller: tabController,
           children: createSchedule(context),
-          ),
         ),
-        Container(
+      ),
+      Container(
           padding: EdgeInsets.all(10),
-            child: Align (
-              alignment: Alignment.bottomRight,
-              child: ElevatedButton(
-                child: Icon(
-                  Icons.edit,
-                  color: Theme.of(context).primaryColor,
-                ),
-                style: ElevatedButton.styleFrom(
-                  shape: CircleBorder(),
-                  padding: EdgeInsets.all(8.0),
-                  primary: Colors.white,
-                  elevation: 10
-                ),
-                onPressed: () {
-                  showDialog(context: context, builder: (BuildContext context){
-                    return AlertDialog(
-                      content:
-                        Column(
-                          children: [
-                            ElevatedButton.icon(
-                              label: Icon(Icons.edit, color: Theme.of(context).primaryColor),
-                                style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(60)),
-                                    padding: EdgeInsets.all(8.0),
-                                    primary: Colors.black,
-                                    elevation: 10
-                                ),
-                              icon: Text('Editar Evento')
-                            ),
-                            ElevatedButton.icon(
-                                label: Icon(Icons.remove, color: Theme.of(context).primaryColor),
-                                style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(60)),
-                                    padding: EdgeInsets.all(8.0),
-                                    primary: Colors.white,
-                                    elevation: 10
-                                ),
-                                icon: Text('Alterar Visibilidade')
-                            ),
-                            ElevatedButton.icon(
-                                label: Icon(Icons.add, color: Theme.of(context).primaryColor),
-                                style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(60)),
-                                    padding: EdgeInsets.all(8.0),
-                                    primary: Colors.white,
-                                    elevation: 10
-                                ),
-                                icon: Text('Adicionar Evento')
-                            ),
-                          ],
-                        ),
-                    );
-                  });
-                },
-              ),
-            ),
-        ),
-      ],
-    );
+          child: Align(alignment: Alignment.bottomRight, child: EditWidget()))
+    ]);
   }
 
   List<Widget> createTabs(MediaQueryData queryData, BuildContext context) {
@@ -128,14 +65,12 @@ class CalendarPageView extends StatelessWidget {
         width: queryData.size.width * 1 / 3,
         child: Tab(
             key: Key('calendar-page-tab-$currentDay'),
-            child: Column(
-                children: [
-                  Text(daysOfTheWeek[currentDay.weekday-1]),
-                  Text(currentDay.day.toString() + '/' + currentDay.month.toString())
-                ])
-        ),
-      )
-      );
+            child: Column(children: [
+              Text(daysOfTheWeek[currentDay.weekday - 1]),
+              Text(
+                  currentDay.day.toString() + '/' + currentDay.month.toString())
+            ])),
+      ));
       currentDay = currentDay.add(Duration(days: 1));
     }
     return tabs;
@@ -174,9 +109,136 @@ class CalendarPageView extends StatelessWidget {
       }
     }
 
-    return Column(
+    return Column(mainAxisSize: MainAxisSize.min, children: dailyActivities);
+  }
+}
+
+class EditWidget extends StatefulWidget {
+  @override
+  _EditWidgetState createState() => _EditWidgetState();
+}
+
+class _EditWidgetState extends State<EditWidget> {
+  bool _areEditButtonsVisible = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
       mainAxisSize: MainAxisSize.min,
-      children: dailyActivities
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Container(
+          padding: EdgeInsets.all(0),
+          child: ElevatedButton(
+            child: Icon(
+              Icons.edit,
+              color: Theme.of(context).primaryColor,
+            ),
+            style: ElevatedButton.styleFrom(
+                shape: CircleBorder(),
+                padding: EdgeInsets.all(8.0),
+                primary: Colors.white,
+                elevation: 10),
+            onPressed: _toggleEditButtons,
+          ),
+        ),
+        if (_areEditButtonsVisible)
+          Column(
+            children: [
+              Container(
+                width: 175,
+                child: ElevatedButton(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Editar Evento',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                        )
+                      ),
+                      Icon(
+                        Icons.edit_attributes,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ],
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(50))
+                    ),
+                    padding: EdgeInsets.all(8.0),
+                    primary: Colors.white,
+                    elevation: 10),
+                  onPressed: () {},
+                ),
+              ),
+              Container(
+                width: 175,
+                child: ElevatedButton(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Alterar Visibilidade',
+                        style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        )
+                      ),
+                      Icon(
+                        Icons.remove,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ],
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(50))
+                    ),
+                    padding: EdgeInsets.all(8.0),
+                    primary: Colors.white,
+                    elevation: 10),
+                  onPressed: () {},
+                ),
+              ),
+              Container(
+                width: 175,
+                child: ElevatedButton(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Adicionar Evento',
+                        style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        )
+                      ),
+                      Icon(
+                        Icons.add,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ],
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(50))
+                    ),
+                    padding: EdgeInsets.all(8.0),
+                    primary: Colors.white,
+                    elevation: 10),
+                  onPressed: () {},
+                ),
+              ),
+          ],
+        )
+      ],
     );
+  }
+
+  void _toggleEditButtons() {
+    setState(() {
+      _areEditButtonsVisible = !_areEditButtonsVisible;
+    });
   }
 }
