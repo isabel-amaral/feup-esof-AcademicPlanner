@@ -25,8 +25,10 @@ class _CalendarPageState extends SecondaryPageViewState
   //In the future these might have to be passed to CalendarPageView
   DateTime startDate = DateTime(2021, 10, 18);
   DateTime endDate = DateTime(2021, 7, 16);
-  DateTime weekStartDate = DateTime.now().add(Duration (days: - (DateTime.now().weekday - 1)));
-  DateTime weekEndDate = (DateTime.now().add(Duration (days: - (DateTime.now().weekday - 1)))).add(Duration (days: 6));
+  DateTime weekStartDate = DateTime.now().add(
+      Duration (days: - (DateTime.now().weekday - 1)));
+  DateTime weekEndDate = (DateTime.now().add(
+      Duration (days: - (DateTime.now().weekday - 1)))).add(Duration (days: 6));
   final List<String> daysOfTheWeek = [
     'Segunda',
     'Terça',
@@ -74,8 +76,7 @@ class _CalendarPageState extends SecondaryPageViewState
   void initState() {
     super.initState();
     tabController = TabController(vsync: this, length: daysOfTheWeek.length);
-    final offset = (weekDay > 7) ? 0 : (weekDay - 1) % 7;
-    tabController.animateTo((tabController.index + offset));
+    tabController.animateTo(0);
   }
 
   @override
@@ -88,6 +89,15 @@ class _CalendarPageState extends SecondaryPageViewState
   Widget getBody(BuildContext context) {
     return StoreConnector<AppState, Tuple2<List<Exam>, List<Lecture>>>(
       converter: (store) {
+        final DateTime monday = DateTime.now().add(
+            Duration (days: - (DateTime.now().weekday - 1)));
+        tabController.animateTo(0);
+        if (monday.day == weekStartDate.day &&
+            monday.month == weekStartDate.month &&
+            monday.year == weekStartDate.year) {
+          final offset = (weekDay > 7) ? 0 : (weekDay - 1) % 7;
+          tabController.animateTo((tabController.index + offset));
+        }
 
         final List<Exam> exams = store.state.content['exams'];
         final Map<String, bool> filteredExamTypes =
