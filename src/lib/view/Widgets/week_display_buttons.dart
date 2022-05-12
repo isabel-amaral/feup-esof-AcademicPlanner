@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 
 class WeekDisplayButtons extends StatelessWidget {
-  final DateTime start;
-  final DateTime end;
+  final DateTime currentStartDate;
   final Function callback;
 
   const WeekDisplayButtons(
       {Key key,
-        @required this.start,
-        @required this.end,
+        @required this.currentStartDate,
         @required this.callback}) : super(key: key);
 
   @override
@@ -35,9 +33,9 @@ class WeekDisplayButtons extends StatelessWidget {
                    icon: Icon(Icons.navigate_before),
                    style: style,
                    onPressed: () {
-                     final DateTime weekStartDate = start.add(Duration(days: -7));
-                     final DateTime weekEndDate = start.add(Duration(days: -1));
-                     callback(weekStartDate, weekEndDate);
+                     final DateTime previousMonday =
+                        currentStartDate.add(Duration(days: -7));
+                     callback(previousMonday);
                    }
                ),
                ElevatedButton.icon(
@@ -45,9 +43,9 @@ class WeekDisplayButtons extends StatelessWidget {
                    label: Icon(Icons.navigate_next),
                    style: style,
                    onPressed: () {
-                     final DateTime weekStartDate = end.add(Duration(days: 1));
-                     final DateTime weekEndDate = end.add(Duration(days: 7));
-                     callback(weekStartDate, weekEndDate);
+                     final DateTime nextMonday =
+                        currentStartDate.add(Duration(days: 7));
+                     callback(nextMonday);
                    }
                )
             ]

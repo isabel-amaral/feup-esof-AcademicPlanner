@@ -39,10 +39,10 @@ class _CalendarPageState extends SecondaryPageViewState
     'Domingo'
   ];
 
-  void setDates(DateTime start, DateTime end){
+  void setDates(DateTime start){
     setState((){
       this.weekStartDate = start;
-      this.weekEndDate = end;
+      this.weekEndDate = start.add(Duration(days: 6));
     });
   }
 

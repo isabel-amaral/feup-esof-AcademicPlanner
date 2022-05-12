@@ -41,8 +41,7 @@ class CalendarPageView extends StatelessWidget {
           children: [
             PageTitle(name: 'Agenda'),
             WeekDisplayButtons(
-                start: startDate,
-                end: endDate,
+                currentStartDate: startDate,
                 callback: callback
             ),
             TabBar(
