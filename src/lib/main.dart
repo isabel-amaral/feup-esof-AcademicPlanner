@@ -12,6 +12,7 @@ import 'package:uni/redux/actions.dart';
 import 'package:uni/redux/reducers.dart';
 import 'package:uni/utils/constants.dart' as Constants;
 import 'package:uni/view/Pages/about_page_view.dart';
+import 'package:uni/model/calendar_page_model.dart';
 import 'package:uni/view/Pages/bug_report_page_view.dart';
 import 'package:uni/view/Pages/bus_stop_next_arrivals_page.dart';
 import 'package:uni/view/Pages/exams_page_view.dart';
@@ -85,6 +86,9 @@ class MyAppState extends State<MyApp> {
               case '/' + Constants.navPersonalArea:
                 return PageTransition.makePageTransition(
                     page: HomePageView(), settings: settings);
+              case '/' + Constants.navCalendar:
+                return PageTransition.makePageTransition(
+                    page: CalendarPage(), settings: settings);
               case '/' + Constants.navSchedule:
                 return PageTransition.makePageTransition(
                     page: SchedulePage(), settings: settings);
