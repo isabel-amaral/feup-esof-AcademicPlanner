@@ -15,16 +15,18 @@ class CalendarPageView extends StatelessWidget {
   final List<String> daysOfTheWeek;
   final TabController tabController;
   final ScrollController scrollViewController;
+  final Function callback;
 
   CalendarPageView(
       {Key key,
-      @required this.exams,
-      @required this.lectures,
-      @required this.startDate,
-      @required this.endDate,
-      @required this.daysOfTheWeek,
-      @required this.tabController,
-      this.scrollViewController});
+        @required this.exams,
+        @required this.lectures,
+        @required this.startDate,
+        @required this.endDate,
+        @required this.daysOfTheWeek,
+        @required this.tabController,
+        @required this.callback,
+        this.scrollViewController});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,10 @@ class CalendarPageView extends StatelessWidget {
           shrinkWrap: true,
           children: [
             PageTitle(name: 'Agenda'),
-            WeekDisplayButtons(),
+            WeekDisplayButtons(
+                currentStartDate: startDate,
+                callback: callback
+            ),
             TabBar(
               controller: tabController,
               unselectedLabelColor: labelColor,
