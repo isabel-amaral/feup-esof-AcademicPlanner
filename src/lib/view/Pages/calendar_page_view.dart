@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:uni/model/entities/exam.dart';
 import 'package:uni/model/entities/lecture.dart';
 import 'package:uni/view/Widgets/page_title.dart';
+import 'package:uni/view/Widgets/schedule_edit_widgets.dart';
 import 'package:uni/view/Widgets/schedule_row.dart';
 import 'package:uni/view/Widgets/schedule_slot.dart';
 import 'package:uni/view/Widgets/week_display_buttons.dart';
-
 
 class CalendarPageView extends StatelessWidget {
   final List<Exam> exams;
@@ -18,19 +18,19 @@ class CalendarPageView extends StatelessWidget {
 
   CalendarPageView(
       {Key key,
-        @required this.exams,
-        @required this.lectures,
-        @required this.startDate,
-        @required this.endDate,
-        @required this.daysOfTheWeek,
-        @required this.tabController,
-        this.scrollViewController});
+      @required this.exams,
+      @required this.lectures,
+      @required this.startDate,
+      @required this.endDate,
+      @required this.daysOfTheWeek,
+      @required this.tabController,
+      this.scrollViewController});
 
   @override
   Widget build(BuildContext context) {
     final MediaQueryData queryData = MediaQuery.of(context);
     final Color labelColor = Color.fromARGB(255, 0x50, 0x50, 0x50);
-
+    
     return Column(
       children: [
         ListView(
@@ -55,9 +55,16 @@ class CalendarPageView extends StatelessWidget {
           child: TabBarView(
           controller: tabController,
           children: createSchedule(context),
-          ),
+        ),
+      ),
+      Container(
+        padding: EdgeInsets.all(10),
+        child: Align(
+          alignment: Alignment.bottomRight, 
+          child: EditWidget(),
+          )
         )
-      ],
+      ]
     );
   }
 
