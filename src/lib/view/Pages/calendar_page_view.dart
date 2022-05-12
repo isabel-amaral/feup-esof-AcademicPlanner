@@ -15,6 +15,7 @@ class CalendarPageView extends StatelessWidget {
   final List<String> daysOfTheWeek;
   final TabController tabController;
   final ScrollController scrollViewController;
+  final Function callback;
 
   CalendarPageView(
       {Key key,
@@ -24,6 +25,7 @@ class CalendarPageView extends StatelessWidget {
         @required this.endDate,
         @required this.daysOfTheWeek,
         @required this.tabController,
+        @required this.callback,
         this.scrollViewController});
 
   @override
@@ -38,7 +40,11 @@ class CalendarPageView extends StatelessWidget {
           shrinkWrap: true,
           children: [
             PageTitle(name: 'Agenda'),
-            WeekDisplayButtons(),
+            WeekDisplayButtons(
+                start: startDate,
+                end: endDate,
+                callback: callback
+            ),
             TabBar(
               controller: tabController,
               unselectedLabelColor: labelColor,

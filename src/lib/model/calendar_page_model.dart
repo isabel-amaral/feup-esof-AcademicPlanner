@@ -25,8 +25,8 @@ class _CalendarPageState extends SecondaryPageViewState
   //In the future these might have to be passed to CalendarPageView
   DateTime startDate = DateTime(2021, 10, 18);
   DateTime endDate = DateTime(2021, 7, 16);
-  DateTime weekStartDate;
-  DateTime weekEndDate;
+  DateTime weekStartDate = DateTime.now().add(Duration (days: - (DateTime.now().weekday - 1)));
+  DateTime weekEndDate = (DateTime.now().add(Duration (days: - (DateTime.now().weekday - 1)))).add(Duration (days: 6));
   final List<String> daysOfTheWeek = [
     'Segunda',
     'Terça',
@@ -37,10 +37,11 @@ class _CalendarPageState extends SecondaryPageViewState
     'Domingo'
   ];
 
-  void getCurrentWeek() {
-    final DateTime currentDay = DateTime.now();
-    weekStartDate = currentDay.add(Duration (days: - (currentDay.weekday - 1)));
-    weekEndDate = weekStartDate.add(Duration (days: 6));
+  void setDates(DateTime start, DateTime end){
+    setState((){
+      this.weekStartDate = start;
+      this.weekEndDate = end;
+    });
   }
 
   /// Limits lectures to one week
@@ -87,7 +88,6 @@ class _CalendarPageState extends SecondaryPageViewState
   Widget getBody(BuildContext context) {
     return StoreConnector<AppState, Tuple2<List<Exam>, List<Lecture>>>(
       converter: (store) {
-        getCurrentWeek();
 
         final List<Exam> exams = store.state.content['exams'];
         final Map<String, bool> filteredExamTypes =
@@ -111,7 +111,9 @@ class _CalendarPageState extends SecondaryPageViewState
             startDate: weekStartDate,
             endDate: weekEndDate,
             tabController: tabController,
-            scrollViewController: scrollViewController);
+            scrollViewController: scrollViewController,
+            callback: setDates
+            );
       },
     );
   }
