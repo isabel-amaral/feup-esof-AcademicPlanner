@@ -5,6 +5,7 @@ import 'package:uni/view/Widgets/page_title.dart';
 import 'package:uni/view/Widgets/schedule_edit_widgets.dart';
 import 'package:uni/view/Widgets/schedule_row.dart';
 import 'package:uni/view/Widgets/schedule_slot.dart';
+import 'package:uni/view/Widgets/week_display_buttons.dart';
 
 class CalendarPageView extends StatelessWidget {
   final List<Exam> exams;
@@ -29,22 +30,29 @@ class CalendarPageView extends StatelessWidget {
   Widget build(BuildContext context) {
     final MediaQueryData queryData = MediaQuery.of(context);
     final Color labelColor = Color.fromARGB(255, 0x50, 0x50, 0x50);
-    return Column(children: [
-      ListView(scrollDirection: Axis.vertical, shrinkWrap: true, children: [
-        PageTitle(name: 'Agenda'),
-        TabBar(
-          controller: tabController,
-          unselectedLabelColor: labelColor,
-          labelColor: labelColor,
-          isScrollable: true,
-          indicatorWeight: 3.0,
-          indicatorColor: Theme.of(context).primaryColor,
-          labelPadding: EdgeInsets.all(0.0),
-          tabs: createTabs(queryData, context),
-        )
-      ]),
-      Expanded(
-        child: TabBarView(
+    
+    return Column(
+      children: [
+        ListView(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          children: [
+            PageTitle(name: 'Agenda'),
+            WeekDisplayButtons(),
+            TabBar(
+              controller: tabController,
+              unselectedLabelColor: labelColor,
+              labelColor: labelColor,
+              isScrollable: true,
+              indicatorWeight: 3.0,
+              indicatorColor: Theme.of(context).primaryColor,
+              labelPadding: EdgeInsets.all(0.0),
+              tabs: createTabs(queryData, context),
+            )
+          ]
+        ),
+        Expanded(
+          child: TabBarView(
           controller: tabController,
           children: createSchedule(context),
         ),
@@ -67,16 +75,34 @@ class CalendarPageView extends StatelessWidget {
     DateTime currentDay = startDate;
     while (currentDay != nextWeek) {
       tabs.add(Container(
-        color: Theme.of(context).backgroundColor,
         width: queryData.size.width * 1 / 3,
+        decoration: BoxDecoration(
+          color: Theme.of(context).backgroundColor,
+          border: Border(
+            bottom: BorderSide(
+              width: 0.7,
+              color: Theme.of(context).primaryColor
+            )
+          )
+        ),
         child: Tab(
-            key: Key('calendar-page-tab-$currentDay'),
-            child: Column(children: [
-              Text(daysOfTheWeek[currentDay.weekday - 1]),
-              Text(
-                  currentDay.day.toString() + '/' + currentDay.month.toString())
-            ])),
-      ));
+          key: Key('calendar-page-tab-$currentDay'),
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
+                child: Text(daysOfTheWeek[currentDay.weekday-1],
+                  style: TextStyle(fontWeight: FontWeight.bold))
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
+                child: Text(currentDay.day.toString() + '/' + currentDay.month.toString()),
+              )
+            ]
+          )
+        ),
+      )
+      );
       currentDay = currentDay.add(Duration(days: 1));
     }
     return tabs;
@@ -115,6 +141,17 @@ class CalendarPageView extends StatelessWidget {
       }
     }
 
-    return Column(mainAxisSize: MainAxisSize.min, children: dailyActivities);
+    if (dailyActivities.isEmpty) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Não existem atividades', style: TextStyle(fontSize: 17))
+        ],
+      );
+    }
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: dailyActivities
+    );
   }
 }
