@@ -32,7 +32,7 @@ class _EditWidgetState extends State<EditWidget> {
     return Container(
       child: ElevatedButton(
         child: Icon(
-          Icons.edit,
+          (_areEditButtonsVisible) ? Icons.clear : Icons.edit,
           color: Theme.of(context).primaryColor,
         ),
         style: ElevatedButton.styleFrom(
