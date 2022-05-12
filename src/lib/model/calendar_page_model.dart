@@ -58,14 +58,11 @@ class _CalendarPageState extends SecondaryPageViewState
     return limitedLectures;
   }
 
-  /// Limits exmas to the week in display -
-  /// right now hardcoded values are being used
-  // In the future we might need to change the logic of this method
+  /// Limits exams to the week in display
   List<Exam> limitExams(exams) {
     final limitedExams = <Exam>[];
-
     for (Exam exam in exams) {
-      if (exam.date.isAfter(startDate) && exam.date.isBefore(endDate)) {
+      if (exam.date.isAfter(weekStartDate) && exam.date.isBefore(weekEndDate)) {
         limitedExams.add(exam);
       }
     }
