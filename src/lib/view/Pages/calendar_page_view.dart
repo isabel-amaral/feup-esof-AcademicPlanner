@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:uni/model/entities/exam.dart';
 import 'package:uni/model/entities/lecture.dart';
 import 'package:uni/view/Widgets/page_title.dart';
+import 'package:uni/view/Widgets/schedule_edit_widgets.dart';
 import 'package:uni/view/Widgets/schedule_row.dart';
 import 'package:uni/view/Widgets/schedule_slot.dart';
 
@@ -49,9 +50,14 @@ class CalendarPageView extends StatelessWidget {
         ),
       ),
       Container(
-          padding: EdgeInsets.all(10),
-          child: Align(alignment: Alignment.bottomRight, child: EditWidget()))
-    ]);
+        padding: EdgeInsets.all(10),
+        child: Align(
+          alignment: Alignment.bottomRight, 
+          child: EditWidget(),
+          )
+        )
+      ]
+    );
   }
 
   List<Widget> createTabs(MediaQueryData queryData, BuildContext context) {
@@ -110,135 +116,5 @@ class CalendarPageView extends StatelessWidget {
     }
 
     return Column(mainAxisSize: MainAxisSize.min, children: dailyActivities);
-  }
-}
-
-class EditWidget extends StatefulWidget {
-  @override
-  _EditWidgetState createState() => _EditWidgetState();
-}
-
-class _EditWidgetState extends State<EditWidget> {
-  bool _areEditButtonsVisible = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.end,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Container(
-          padding: EdgeInsets.all(0),
-          child: ElevatedButton(
-            child: Icon(
-              Icons.edit,
-              color: Theme.of(context).primaryColor,
-            ),
-            style: ElevatedButton.styleFrom(
-                shape: CircleBorder(),
-                padding: EdgeInsets.all(8.0),
-                primary: Colors.white,
-                elevation: 10),
-            onPressed: _toggleEditButtons,
-          ),
-        ),
-        if (_areEditButtonsVisible)
-          Column(
-            children: [
-              Container(
-                width: 175,
-                child: ElevatedButton(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Editar Evento',
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                        )
-                      ),
-                      Icon(
-                        Icons.edit_attributes,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ],
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(50))
-                    ),
-                    padding: EdgeInsets.all(8.0),
-                    primary: Colors.white,
-                    elevation: 10),
-                  onPressed: () {},
-                ),
-              ),
-              Container(
-                width: 175,
-                child: ElevatedButton(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Alterar Visibilidade',
-                        style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        )
-                      ),
-                      Icon(
-                        Icons.remove,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ],
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(50))
-                    ),
-                    padding: EdgeInsets.all(8.0),
-                    primary: Colors.white,
-                    elevation: 10),
-                  onPressed: () {},
-                ),
-              ),
-              Container(
-                width: 175,
-                child: ElevatedButton(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Adicionar Evento',
-                        style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        )
-                      ),
-                      Icon(
-                        Icons.add,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ],
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(50))
-                    ),
-                    padding: EdgeInsets.all(8.0),
-                    primary: Colors.white,
-                    elevation: 10),
-                  onPressed: () {},
-                ),
-              ),
-          ],
-        )
-      ],
-    );
-  }
-
-  void _toggleEditButtons() {
-    setState(() {
-      _areEditButtonsVisible = !_areEditButtonsVisible;
-    });
   }
 }
