@@ -11,6 +11,7 @@ import 'package:uni/model/profile_page_model.dart';
 import 'package:uni/view/Widgets/navigation_drawer.dart';
 import 'package:uni/utils/constants.dart' as Constants;
 
+/// Manages the  section inside the user's personal area.
 abstract class GeneralPageViewState extends State<StatefulWidget> {
   final double borderMargin = 18.0;
   static FileImage decorageImage;
@@ -21,15 +22,18 @@ abstract class GeneralPageViewState extends State<StatefulWidget> {
   }
 
   Widget getBody(BuildContext context) {
-    return  Container();
+    return Container();
   }
 
+  /// Returns the current user image.
+  /// 
+  /// If the image is not found / doesn't exist returns a generic placeholder.
   DecorationImage getDecorageImage(File x) {
     final fallbackImage = decorageImage == null
-        ?  AssetImage('assets/images/profile_placeholder.png')
+        ? AssetImage('assets/images/profile_placeholder.png')
         : decorageImage;
 
-    final image = (x == null) ? fallbackImage :  FileImage(x);
+    final image = (x == null) ? fallbackImage : FileImage(x);
     final result = DecorationImage(fit: BoxFit.cover, image: image);
     if (x != null) {
       decorageImage = image;
@@ -49,39 +53,42 @@ abstract class GeneralPageViewState extends State<StatefulWidget> {
         return () => handleRefresh(store);
       },
       builder: (context, refresh) {
-        return  RefreshIndicator(
-            key:  GlobalKey<RefreshIndicatorState>(),
+        return RefreshIndicator(
+            key: GlobalKey<RefreshIndicatorState>(),
             child: child,
             onRefresh: refresh,
-            color: Theme.of(context).primaryColor);
+            color: Theme.of(context).accentColor);
       },
     );
   }
 
   Widget getScaffold(BuildContext context, Widget body) {
-    return  Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+    return Scaffold(
       appBar: buildAppBar(context),
-      drawer:  NavigationDrawer(parentContext: context),
+      drawer: NavigationDrawer(parentContext: context),
       body: this.refreshState(context, body),
     );
   }
 
+  /// Builds the upper bar of the app.
+  /// 
+  /// This method returns an instance of `AppBar` containing the app's logo,
+  /// an option button and a button with the user's picture.
   AppBar buildAppBar(BuildContext context) {
     final MediaQueryData queryData = MediaQuery.of(context);
 
-    return  AppBar(
+    return AppBar(
       bottom: PreferredSize(
         preferredSize: Size.zero,
         child: Container(
           margin: EdgeInsets.only(left: borderMargin, right: borderMargin),
-          color: Theme.of(context).accentColor,
+          color: Theme.of(context).dividerColor,
           height: 1.5,
         ),
       ),
       elevation: 0,
-      iconTheme:  IconThemeData(color: Theme.of(context).primaryColor),
-      backgroundColor: Theme.of(context).backgroundColor,
+      iconTheme: IconThemeData(color: Theme.of(context).accentColor),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       titleSpacing: 0.0,
       title: ButtonTheme(
           minWidth: 0,
@@ -89,7 +96,12 @@ abstract class GeneralPageViewState extends State<StatefulWidget> {
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           shape: RoundedRectangleBorder(),
           child: TextButton(
-            onPressed: () => Navigator.pushNamed(context, '/' + Constants.navPersonalArea),
+            onPressed: () {
+              final currentRouteName = ModalRoute.of(context).settings.name;
+              if (currentRouteName != Constants.navPersonalArea) {
+                Navigator.pushNamed(context, '/${Constants.navPersonalArea}');
+              }
+            },
             child: SvgPicture.asset(
               'assets/images/logo_dark.svg',
               height: queryData.size.height / 25,
@@ -101,6 +113,7 @@ abstract class GeneralPageViewState extends State<StatefulWidget> {
     );
   }
 
+  // Gets a round shaped button with the photo of the current user.
   Widget getTopRightButton(BuildContext context) {
     return FutureBuilder(
         future: buildDecorageImage(context),
@@ -108,8 +121,8 @@ abstract class GeneralPageViewState extends State<StatefulWidget> {
             AsyncSnapshot<DecorationImage> decorationImage) {
           return TextButton(
             onPressed: () => {
-              Navigator.push(context,
-                   MaterialPageRoute(builder: (__) =>  ProfilePage()))
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (__) => ProfilePage()))
             },
             child: Container(
                 width: 40.0,

@@ -5,6 +5,7 @@ import 'package:uni/view/Widgets/page_title.dart';
 import 'package:uni/view/Widgets/request_dependent_widget_builder.dart';
 import 'package:uni/view/Widgets/schedule_slot.dart';
 
+/// Manages the 'schedule' sections of the app
 class SchedulePageView extends StatelessWidget {
   SchedulePageView(
       {Key key,
@@ -23,7 +24,6 @@ class SchedulePageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MediaQueryData queryData = MediaQuery.of(context);
-    final Color labelColor = Color.fromARGB(255, 0x50, 0x50, 0x50);
 
     return Column(children: <Widget>[
       ListView(
@@ -33,12 +33,7 @@ class SchedulePageView extends StatelessWidget {
           PageTitle(name: 'Horário'),
           TabBar(
             controller: tabController,
-            unselectedLabelColor: labelColor,
-            labelColor: labelColor,
             isScrollable: true,
-            indicatorWeight: 3.0,
-            indicatorColor: Theme.of(context).primaryColor,
-            labelPadding: EdgeInsets.all(0.0),
             tabs: createTabs(queryData, context),
           ),
         ],
@@ -51,6 +46,7 @@ class SchedulePageView extends StatelessWidget {
     ]);
   }
 
+  /// Returns a list of widgets empty with tabs for each day of the week.
   List<Widget> createTabs(queryData, BuildContext context) {
     final List<Widget> tabs = <Widget>[];
     for (var i = 0; i < daysOfTheWeek.length; i++) {
@@ -71,6 +67,7 @@ class SchedulePageView extends StatelessWidget {
     return tabBarViewContent;
   }
 
+  /// Returns a list of widgets for the rows with a singular class info.
   List<Widget> createScheduleRows(lectures, BuildContext context) {
     final List<Widget> scheduleContent = <Widget>[];
     for (int i = 0; i < lectures.length; i++) {
@@ -111,6 +108,7 @@ class SchedulePageView extends StatelessWidget {
       contentChecker: aggLectures[day].isNotEmpty,
       onNullContent:
           Center(child: Text('Não possui aulas à ' + daysOfTheWeek[day] + '.')),
+      index: day,
     );
   }
 }

@@ -4,14 +4,13 @@ import 'package:uni/controller/local_storage/app_shared_preferences.dart';
 import 'package:uni/model/app_state.dart';
 import 'package:uni/model/home_page_model.dart';
 import 'package:uni/redux/actions.dart';
+import 'package:uni/utils/constants.dart' as Constants;
 import 'package:uni/view/Widgets/account_info_card.dart';
 import 'package:uni/view/Widgets/back_button_exit_wrapper.dart';
 import 'package:uni/view/Widgets/bus_stop_card.dart';
 import 'package:uni/view/Widgets/exam_card.dart';
 import 'package:uni/view/Widgets/print_info_card.dart';
 import 'package:uni/view/Widgets/schedule_card.dart';
-import 'package:uni/view/theme.dart';
-import 'package:uni/utils/constants.dart' as Constants;
 
 class MainCardsList extends StatelessWidget {
   final Map<FAVORITE_WIDGET_TYPE, Function> cardCreators = {
@@ -54,13 +53,7 @@ class MainCardsList extends StatelessWidget {
                 ),
                 actions: [
                   TextButton(
-                      child: Text(
-                        'Cancelar',
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline4
-                            .apply(color: Theme.of(context).primaryColor),
-                      ),
+                      child: Text('Cancelar'),
                       onPressed: () => Navigator.pop(context))
                 ]);
           }), //Add FAB functionality here
@@ -88,7 +81,8 @@ class MainCardsList extends StatelessWidget {
             },
           ),
           decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(color: accentColor))),
+              border: Border(
+                  bottom: BorderSide(color: Theme.of(context).dividerColor))),
         ));
       }
     });
@@ -128,13 +122,8 @@ class MainCardsList extends StatelessWidget {
         GestureDetector(
             onTap: () => StoreProvider.of<AppState>(context)
                 .dispatch(SetHomePageEditingMode(!this.isEditing(context))),
-            child: Text(
-              this.isEditing(context) ? 'Concluir Edição' : 'Editar',
-              style: Theme.of(context)
-                  .textTheme
-                  .subtitle2
-                  .apply(fontSizeFactor: 0.8),
-            ))
+            child: Text(this.isEditing(context) ? 'Concluir Edição' : 'Editar',
+                style: Theme.of(context).textTheme.caption))
       ]),
     );
   }

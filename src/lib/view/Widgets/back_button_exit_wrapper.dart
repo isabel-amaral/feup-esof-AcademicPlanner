@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+/// Manages the app section displayed when the user presses the back button
 class BackButtonExitWrapper extends StatelessWidget {
   BackButtonExitWrapper({
     Key key,
@@ -12,25 +13,19 @@ class BackButtonExitWrapper extends StatelessWidget {
   final Widget child;
 
   Future<bool> backButton() {
-    final buttonStyle = ElevatedButton.styleFrom(
-        primary: Theme.of(context).primaryColor,
-    );
-
     return showDialog(
             context: context,
-            builder: (context) =>  AlertDialog(
-                  title:  Text('Tens a certeza que pretendes sair?'),
+            builder: (context) => AlertDialog(
+                  title: Text('Tens a certeza que pretendes sair?'),
                   actions: <Widget>[
-                     ElevatedButton(
+                    ElevatedButton(
                       onPressed: () => Navigator.of(context).pop(false),
-                      child:  Text('Não'),
-                      style: buttonStyle,
+                      child: Text('Não'),
                     ),
-                     ElevatedButton(
+                    ElevatedButton(
                       onPressed: () => SystemChannels.platform
                           .invokeMethod('SystemNavigator.pop'),
-                      child:  Text('Sim'),
-                      style: buttonStyle,
+                      child: Text('Sim'),
                     )
                   ],
                 )) ??
@@ -39,7 +34,7 @@ class BackButtonExitWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  WillPopScope(
+    return WillPopScope(
       child: this.child,
       onWillPop: () => this.backButton(),
     );

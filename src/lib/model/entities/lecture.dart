@@ -1,6 +1,7 @@
 import 'package:flutter/rendering.dart';
 import 'package:logger/logger.dart';
 
+/// Stores information about a lecture.
 class Lecture {
   static var dayName = [
     'Segunda-feira',
@@ -22,27 +23,65 @@ class Lecture {
   int blocks;
   int startTimeSeconds;
 
-  Lecture(String subject, String typeClass, int day, int startTimeSeconds,
-      int blocks, String room, String teacher, String classNumber) {
+  /// Creates an instance of the class [Lecture].
+  Lecture(
+      String subject,
+      String typeClass,
+      int day,
+      int blocks,
+      String room,
+      String teacher,
+      String classNumber,
+      int startTimeHours,
+      int startTimeMinutes,
+      int endTimeHours,
+      int endTimeMinutes) {
     this.subject = subject;
     this.typeClass = typeClass;
     this.room = room;
     this.teacher = teacher;
     this.day = day;
     this.blocks = blocks;
-    this.startTimeSeconds = startTimeSeconds;
     this.classNumber = classNumber;
-
-    this.startTime = (startTimeSeconds ~/ 3600).toString().padLeft(2, '0') +
-        ':' +
-        ((startTimeSeconds % 3600) ~/ 60).toString().padLeft(2, '0');
-    startTimeSeconds += 60 * 30 * blocks;
-    this.endTime = (startTimeSeconds ~/ 3600).toString().padLeft(2, '0') +
-        ':' +
-        ((startTimeSeconds % 3600) ~/ 60).toString().padLeft(2, '0');
+    this.startTime = startTimeHours.toString().padLeft(2, '0') +
+        'h' +
+        startTimeMinutes.toString().padLeft(2, '0');
+    this.endTime = endTimeHours.toString().padLeft(2, '0') +
+        'h' +
+        endTimeMinutes.toString().padLeft(2, '0');
   }
 
-  Lecture.secConstructor(
+  factory Lecture.fromApi(
+      String subject,
+      String typeClass,
+      int day,
+      int startTimeSeconds,
+      int blocks,
+      String room,
+      String teacher,
+      String classNumber) {
+    final startTimeHours = (startTimeSeconds ~/ 3600);
+    final startTimeMinutes = ((startTimeSeconds % 3600) ~/ 60);
+    final endTimeSeconds = 60 * 30 * blocks + startTimeSeconds;
+    final endTimeHours = (endTimeSeconds ~/ 3600);
+    final endTimeMinutes = ((endTimeSeconds % 3600) ~/ 60);
+    final lecture = Lecture(
+        subject,
+        typeClass,
+        day,
+        blocks,
+        room,
+        teacher,
+        classNumber,
+        startTimeHours,
+        startTimeMinutes,
+        endTimeHours,
+        endTimeMinutes);
+    lecture.startTimeSeconds = startTimeSeconds;
+    return lecture;
+  }
+
+  factory Lecture.fromHtml(
       String subject,
       String typeClass,
       int day,
@@ -51,35 +90,37 @@ class Lecture {
       String room,
       String teacher,
       String classNumber) {
-    this.subject = subject;
-    this.typeClass = typeClass;
-    this.room = room;
-    this.teacher = teacher;
-    this.day = day;
-    this.blocks = blocks;
-    this.classNumber = classNumber;
-
-    int hour = int.parse(startTime.substring(0, 2));
-    int min = int.parse(startTime.substring(3, 5));
-    this.startTime =
-        hour.toString().padLeft(2, '0') + 'h' + min.toString().padLeft(2, '0');
-    min += blocks * 30;
-    hour += min ~/ 60;
-    min %= 60;
-    this.endTime =
-        hour.toString().padLeft(2, '0') + 'h' + min.toString().padLeft(2, '0');
+    final startTimeHours = int.parse(startTime.substring(0, 2));
+    final startTimeMinutes = int.parse(startTime.substring(3, 5));
+    final endTimeHours =
+        (startTimeMinutes + (blocks * 30)) ~/ 60 + startTimeHours;
+    final endTimeMinutes = (startTimeMinutes + (blocks * 30)) % 60;
+    return Lecture(subject, typeClass, day, blocks, room, teacher, classNumber,
+        startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes);
   }
 
+  /// Clones a lecture from the api.
   static Lecture clone(Lecture lec) {
-    return Lecture(lec.subject, lec.typeClass, lec.day, lec.startTimeSeconds,
+    return Lecture.fromApi(
+        lec.subject,
+        lec.typeClass,
+        lec.day,
+        lec.startTimeSeconds,
+        lec.blocks,
+        lec.room,
+        lec.teacher,
+        lec.classNumber);
+  }
+
+
+  /// Clones a lecture from the html.
+  static Lecture cloneHtml(Lecture lec) {
+    return Lecture.fromHtml(lec.subject, lec.typeClass, lec.day, lec.startTime,
         lec.blocks, lec.room, lec.teacher, lec.classNumber);
   }
 
-  static Lecture cloneHtml(Lecture lec) {
-    return Lecture.secConstructor(lec.subject, lec.typeClass, lec.day,
-        lec.startTime, lec.blocks, lec.room, lec.teacher, lec.classNumber);
-  }
 
+  /// Converts this lecture to a map.
   Map<String, dynamic> toMap() {
     return {
       'subject': subject,
@@ -93,6 +134,7 @@ class Lecture {
     };
   }
 
+  /// Prints the data in this lecture to the [Logger] with an INFO level.
   printLecture() {
     Logger().i(subject + ' ' + typeClass);
     Logger().i(dayName[day] +
@@ -106,6 +148,7 @@ class Lecture {
     Logger().i(room + '  ' + teacher + '\n');
   }
 
+  /// Compares the date and time of two lectures.
   int compare(Lecture other) {
     if (day == other.day) {
       return startTime.compareTo(other.startTime);

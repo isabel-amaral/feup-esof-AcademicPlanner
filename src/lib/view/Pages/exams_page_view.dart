@@ -1,3 +1,4 @@
+import 'package:uni/controller/exam.dart';
 import 'package:uni/model/app_state.dart';
 import 'package:uni/model/entities/exam.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ class ExamsPageView extends StatefulWidget {
   State<StatefulWidget> createState() => ExamsPageViewState();
 }
 
+/// Tracks the state of `ExamsLists`.
 class ExamsPageViewState extends SecondaryPageViewState {
   final double borderRadius = 10.0;
 
@@ -35,6 +37,7 @@ class ExamsPageViewState extends SecondaryPageViewState {
   }
 }
 
+/// Manages the 'Exams' section in the user's personal area and 'Exams Map'.
 class ExamsList extends StatelessWidget {
   final List<Exam> exams;
 
@@ -53,6 +56,7 @@ class ExamsList extends StatelessWidget {
     );
   }
 
+  /// Creates a column with all the user's exams.
   List<Widget> createExamsColumn(context, exams) {
     final List<Widget> columns = <Widget>[];
     columns.add(ExamPageTitleFilter(
@@ -119,11 +123,15 @@ class ExamsList extends StatelessWidget {
         key: Key(keyValue),
         margin: EdgeInsets.fromLTRB(12, 4, 12, 0),
         child: RowContainer(
+            color: isHighlighted(exam)
+                ? Theme.of(context).hintColor
+                : Theme.of(context).backgroundColor,
             child: ScheduleRow(
                 subject: exam.subject,
                 rooms: exam.rooms,
                 begin: exam.begin,
                 end: exam.end,
-                type: exam.examType)));
+                type: exam.examType,
+                date: exam.date)));
   }
 }

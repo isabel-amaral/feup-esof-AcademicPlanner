@@ -1,3 +1,4 @@
+import 'package:uni/controller/exam.dart';
 import 'package:uni/model/app_state.dart';
 import 'package:uni/model/entities/exam.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,13 +14,7 @@ import 'package:uni/view/Widgets/schedule_row.dart';
 
 import 'generic_card.dart';
 
-Color examColor(Exam exam, context) {
-  return (exam.examType.contains('''EN''')) ||
-          (exam.examType.contains('''MT'''))
-      ? Theme.of(context).hintColor
-      : Theme.of(context).backgroundColor;
-}
-
+/// Manages the exam card section inside the personal area.
 class ExamCard extends GenericCard {
   ExamCard({Key key}) : super(key: key);
 
@@ -33,6 +28,10 @@ class ExamCard extends GenericCard {
   onClick(BuildContext context) =>
       Navigator.pushNamed(context, '/' + Constants.navExams);
 
+  /// Returns a widget with all the exams card content.
+  ///
+  /// If there are no exams, a message telling the user
+  /// that no exams exist is displayed.
   @override
   Widget buildCardContent(BuildContext context) {
     return StoreConnector<AppState, Tuple2<List<Exam>, RequestStatus>>(
@@ -60,6 +59,7 @@ class ExamCard extends GenericCard {
     );
   }
 
+  /// Returns a widget with all the exams.
   Widget generateExams(exams, context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -67,6 +67,8 @@ class ExamCard extends GenericCard {
     );
   }
 
+  /// Returns a list of widgets with the primary and secondary exams to
+  /// be displayed in the exam card.
   List<Widget> getExamRows(context, exams) {
     final List<Widget> rows = <Widget>[];
     for (int i = 0; i < 1 && i < exams.length; i++) {
@@ -78,7 +80,7 @@ class ExamCard extends GenericCard {
         decoration: BoxDecoration(
             border: Border(
                 bottom: BorderSide(
-                    width: 1.5, color: Theme.of(context).accentColor))),
+                    width: 1.5, color: Theme.of(context).dividerColor))),
       ));
     }
     for (int i = 1; i < 4 && i < exams.length; i++) {
@@ -87,29 +89,38 @@ class ExamCard extends GenericCard {
     return rows;
   }
 
+  /// Creates a row with the closest exam (which appears separated from the
+  /// others in the card).
   Widget createRowFromExam(context, Exam exam) {
     return Column(children: [
       DateRectangle(date: exam.weekDay + ', ' + exam.day + ' de ' + exam.month),
       Container(
         child: RowContainer(
-          color: examColor(exam, context),
+          color: isHighlighted(exam)
+              ? Theme.of(context).backgroundColor
+              : Theme.of(context).hintColor,
           child: ScheduleRow(
             subject: exam.subject,
             rooms: exam.rooms,
             begin: exam.begin,
             end: exam.end,
             type: exam.examType,
+            date: exam.date,
           ),
         ),
       ),
     ]);
   }
 
+  /// Creates a row for the exams which will be displayed under the closest
+  /// date exam with a separator between them.
   Widget createSecondaryRowFromExam(context, exam) {
     return Container(
       margin: EdgeInsets.only(top: 8),
       child: RowContainer(
-        color: examColor(exam, context),
+        color: isHighlighted(exam)
+            ? Theme.of(context).backgroundColor
+            : Theme.of(context).hintColor,
         child: Container(
           padding: EdgeInsets.all(11),
           child: Row(

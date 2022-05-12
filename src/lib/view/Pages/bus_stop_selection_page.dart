@@ -14,16 +14,17 @@ class BusStopSelectionPage extends StatefulWidget {
   State<StatefulWidget> createState() => BusStopSelectionPageState();
 }
 
+/// Manages the 'Bus stops' section of the app.
 class BusStopSelectionPageState extends UnnamedPageView {
   final double borderRadius = 15.0;
-  final DateTime now =  DateTime.now();
+  final DateTime now = DateTime.now();
 
   final db = AppBusStopDatabase();
-  final Map<String, BusStopData> configuredStops =  Map();
-  final List<String> suggestionsList =  [];
+  final Map<String, BusStopData> configuredStops = Map();
+  final List<String> suggestionsList = [];
 
   List<Widget> getStopsTextList() {
-    final List<Widget> stops =  [];
+    final List<Widget> stops = [];
     configuredStops.forEach((stopCode, stopData) {
       stops.add(Text(stopCode));
     });
@@ -36,26 +37,20 @@ class BusStopSelectionPageState extends UnnamedPageView {
     return StoreConnector<AppState, Map<String, BusStopData>>(
       converter: (store) => store.state.content['configuredBusStops'],
       builder: (context, busStops) {
-        final List<Widget> rows =  [];
+        final List<Widget> rows = [];
         busStops.forEach((stopCode, stopData) =>
             rows.add(BusStopSelectionRow(stopCode, stopData)));
-        final buttonStyle = ElevatedButton.styleFrom(
-            primary: Theme.of(context).primaryColor,
-            padding: const EdgeInsets.all(0.0),
-            shape: RoundedRectangleBorder(
-              borderRadius:  BorderRadius.circular(12.0),
-            ),
-        );
 
         return ListView(
             padding: EdgeInsets.only(
               bottom: 20,
             ),
             children: <Widget>[
-              Container(child: PageTitle(name: 'Paragens Configuradas')),
+              Container(child: PageTitle(name: 'Autocarros Configurados')),
               Container(
                   padding: EdgeInsets.all(20.0),
-                  child: Text('''As paragens favoritas serão apresentadas no widget \'Paragens\' dos favoritos. As restantes serão apresentadas apenas na página.''',
+                  child: Text(
+                      '''Os autocarros favoritos serão apresentados no widget \'Autocarros\' dos favoritos. Os restantes serão apresentados apenas na página.''',
                       textAlign: TextAlign.center)),
               Column(children: rows),
               Container(
@@ -67,30 +62,14 @@ class BusStopSelectionPageState extends UnnamedPageView {
                         ElevatedButton(
                           onPressed: () => showSearch(
                               context: context, delegate: BusStopSearch()),
-                          style: buttonStyle,
                           child: Container(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Text('Adicionar',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline4
-                                    .apply(
-                                        color: Colors.white,
-                                        fontSizeDelta: -2)),
+                            child: Text('Adicionar'),
                           ),
                         ),
                         ElevatedButton(
                           onPressed: () => Navigator.pop(context),
-                          style: buttonStyle,
                           child: Container(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Text('Concluído',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline4
-                                    .apply(
-                                        color: Colors.white,
-                                        fontSizeDelta: -2)),
+                            child: Text('Concluído'),
                           ),
                         ),
                       ]))
@@ -98,5 +77,4 @@ class BusStopSelectionPageState extends UnnamedPageView {
       },
     );
   }
-
 }
