@@ -89,6 +89,7 @@ class NavigationDrawerState extends State<NavigationDrawer> {
     return Container(
         decoration: _getSelectionDecoration(d),
         child: ListTile(
+          key: Key(d),
           title: Container(
             padding: EdgeInsets.only(bottom: 3.0, left: 20.0),
             child: Text(d,
