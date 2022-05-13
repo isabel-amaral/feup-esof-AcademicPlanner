@@ -80,6 +80,8 @@ class CalendarPageView extends StatelessWidget {
 
     final DateTime nextWeek = startDate.add(Duration(days: 7));
     DateTime currentDay = startDate;
+
+    int i = 0;
     while (currentDay != nextWeek) {
       tabs.add(Container(
         width: queryData.size.width * 1 / 3,
@@ -93,17 +95,18 @@ class CalendarPageView extends StatelessWidget {
             )
         ),
         child: Tab(
-            key: Key('calendar-page-tab-$currentDay'),
             child: Column(
                 children: [
                   Padding(
                       padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
                       child: Text(daysOfTheWeek[currentDay.weekday-1],
-                          style: TextStyle(fontWeight: FontWeight.bold))
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          key: Key('calendar-page-tab-weekday-$i'))
                   ),
                   Padding(
                     padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
-                    child: Text(currentDay.day.toString() + '/' + currentDay.month.toString()),
+                    child: Text(currentDay.day.toString() + '/' + currentDay.month.toString(),
+                    key: Key('calendar-page-tab-day-$i')),
                   )
                 ]
             )
@@ -111,6 +114,7 @@ class CalendarPageView extends StatelessWidget {
       )
       );
       currentDay = currentDay.add(Duration(days: 1));
+      i++;
     }
     return tabs;
   }

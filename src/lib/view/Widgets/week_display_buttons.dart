@@ -6,9 +6,16 @@ class WeekDisplayButtons extends StatelessWidget {
   final DateTime currentStartDate;
   final Function callback;
 
+  final int currentStartDay;
+  final int currentStartMonth;
+  final int currentStartYear;
+
   const WeekDisplayButtons(
       {Key key,
         @required this.currentStartDate,
+        this.currentStartDay,
+        this.currentStartMonth,
+        this.currentStartYear,
         @required this.callback}) : super(key: key);
 
   @override
@@ -31,6 +38,7 @@ class WeekDisplayButtons extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ElevatedButton.icon(
+                  key: Key('previous-week-button'),
                   label: Text('Semana Anterior'),
                   icon: Icon(Icons.navigate_before),
                   style: style,
@@ -41,6 +49,7 @@ class WeekDisplayButtons extends StatelessWidget {
                   }
               ),
               ElevatedButton.icon(
+                  key: Key('next-week-button'),
                   icon: Text('Semana Seguinte'),
                   label: Icon(Icons.navigate_next),
                   style: style,
