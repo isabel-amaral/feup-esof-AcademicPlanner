@@ -32,6 +32,7 @@ class _EditWidgetState extends State<EditWidget> {
   Widget mainEditButton() {
     return Container(
       child: ElevatedButton(
+        key: Key('schedule-edit-button'),
         child: Icon(
           (_areEditButtonsVisible) ? Icons.clear : Icons.edit,
           color: _darkRed,
@@ -47,9 +48,19 @@ class _EditWidgetState extends State<EditWidget> {
   }
 
   Widget editButton(String text, IconData icon) {
+    String key;
+    if (text == 'Editar Evento') {
+      key = 'edit-activity-button';
+    } else if (text == 'Alterar Visibilidade') {
+      key = 'change-visibility-button';
+    } else {
+      key = 'add-activity-button';
+    }
+
     return Container(
       width: 175,
       child: ElevatedButton(
+        key: Key(key),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
