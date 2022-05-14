@@ -17,3 +17,5 @@
 - **Logical Architecture**
 - **Physical Architecture**
 - **Vertical Prototype**
+
+### [Project Management](./docs/ProjectManagement/)
