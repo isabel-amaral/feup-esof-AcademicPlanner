@@ -161,9 +161,11 @@ class CalendarPageView extends StatelessWidget {
         ],
       );
     }
-    return Column(
+    return SingleChildScrollView(
+      child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: dailyActivities
+        children: dailyActivities,
+      )
     );
   }
 }

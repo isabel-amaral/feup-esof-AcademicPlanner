@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:uni/view/Widgets/schedule_add_display.dart';
+import 'package:uni/view/Widgets/schedule_new_edit_widget.dart';
 
 const Color _darkRed = Color.fromARGB(255, 0x75, 0x17, 0x1e);
 
@@ -27,8 +26,7 @@ class _EditWidgetState extends State<EditWidget> {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
-        children: buttons
-    );
+        children: buttons);
   }
 
   Widget mainEditButton() {
@@ -83,51 +81,11 @@ class _EditWidgetState extends State<EditWidget> {
             primary: Theme.of(context).primaryColor,
             elevation: 10),
         onPressed: () {
-          showDialog(context: context, builder: (BuildContext context){
-            return AlertDialog(
-              title: Text('Novo Evento',textAlign: TextAlign.center,),
-              content: Form(child: Column(
-                children: [
-                  TextFormField(
-                    cursorColor: _darkRed,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(10),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide(color:Colors.grey)
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide(color:_darkRed)
-                      ),
-                      hintText: 'ex. Jantar de Curso',
-                      labelText: 'Nome',
-                      labelStyle: TextStyle(color: Colors.black)
-                  )),
-                  Padding(padding: EdgeInsets.all(5),),
-                  TextFormField(
-                      cursorColor: _darkRed,
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.all(10),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              borderSide: BorderSide(color:Colors.grey)
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              borderSide: BorderSide(color:_darkRed)
-                          ),
-                          hintText: 'ex. Dress code: formal',
-                          labelText: 'Descrição',
-                          labelStyle: TextStyle(color: Colors.black)
-                      )),
-                ],
-              )),
-              actions: [
-                TextButton(onPressed: (){}, child: Text('Cancel')),
-                TextButton(onPressed: (){}, child: Text('Accept'))]
-            );
-          });
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return NewEditDialog();
+              });
         },
       ),
     );
