@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -67,6 +68,7 @@ class MyAppState extends State<MyApp> {
   MyAppState({@required this.state}) {}
 
   final Store<AppState> state;
+  final Future<FirebaseApp> _fbApp = Firebase.initializeApp();
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +80,18 @@ class MyAppState extends State<MyApp> {
       child: MaterialApp(
           title: 'uni',
           theme: applicationLightTheme,
-          home: SplashScreen(),
+          home: FutureBuilder(
+            future: _fbApp,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Text('Somethind went wrong!');
+              } else if (snapshot.hasData) {
+                return SplashScreen();
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
           navigatorKey: NavigationService.navigatorKey,
           // ignore: missing_return
           onGenerateRoute: (RouteSettings settings) {
