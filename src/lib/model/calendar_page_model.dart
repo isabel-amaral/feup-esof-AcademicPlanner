@@ -23,6 +23,8 @@ class _CalendarPageState extends SecondaryPageViewState
   TabController tabController;
   ScrollController scrollViewController;
 
+  List<Activity> activities = [];
+
   /* startDate and endDate are the dates at which the school year begins/ends */
   //In the future these might have to be passed to CalendarPageView
   DateTime startDate = DateTime(2021, 10, 18);
@@ -71,14 +73,41 @@ class _CalendarPageState extends SecondaryPageViewState
     return limitedExams;
   }
 
-  List<Activity> fetchActivities(String studentID) {
+  void fetchActivities(String studentID) {
     final _database = FirebaseDatabase.instance.ref();
     final activities = <Activity>[];
 
-    _database.child(studentID).onValue.listen((event) {
-      final Map<dynamic, dynamic> data = event.snapshot.value;
+    _database.child(studentID).once().then((value) {
+      final Map<dynamic, dynamic> data = value.snapshot.value;
+
+      for (String activity in data['activities'].keys) {
+        final String name = activity;
+        final String description = data['activities'][activity]['description'];
+        final Frequency frequency = Frequency.values[data['activities'][activity]['frequency']];
+        final Color colorLabel = Color(data['activities'][activity]['color-label']);
+
+        final int day = data['activities'][activity]['day'];
+        final int month = data['activities'][activity]['month'];
+        final int year = data['activities'][activity]['year'];
+        final int startHour = data['activities'][activity]['start-hour'];
+        final int startMin = data['activities'][activity]['start-minute'];
+        final int endHour = data['activities'][activity]['end-hour'];
+        final int endMin = data['activities'][activity]['end-minute'];
+        final DateTime startingDate = DateTime(year, month, day, startHour, startMin);
+        final DateTime endingDate = DateTime(year, month, day, endHour, endMin);
+
+        final Activity _activity = Activity(
+            name: name,
+            description: description,
+            startingDate: startingDate,
+            endingDate: endingDate,
+            frequency: frequency,
+            colorLabel: colorLabel);
+        activities.add(_activity);
+      }
+
+      this.activities = activities;
     });
-    return activities;
   }
 
   @override
@@ -96,7 +125,7 @@ class _CalendarPageState extends SecondaryPageViewState
 
   @override
   Widget getBody(BuildContext context) {
-    return StoreConnector<AppState, Tuple3<List<Exam>, List<Lecture>, List<Activity>>>(
+    return StoreConnector<AppState, Tuple2<List<Exam>, List<Lecture>>>(
       converter: (store) {
         final DateTime monday = DateTime.now().add(
             Duration (days: - (DateTime.now().weekday - 1)));
@@ -120,10 +149,9 @@ class _CalendarPageState extends SecondaryPageViewState
         final List<Lecture> lectures =
         limitLectures(store.state.content['schedule']);
 
-        final List<Activity> activities =
         fetchActivities(store.state.content['profile'].email.substring(2, 11));
 
-        return Tuple3(filteredExams, lectures, activities);
+        return Tuple2(filteredExams, lectures);
       },
       builder: (context, activities) {
         return CalendarPageView(
