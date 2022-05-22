@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'app_state.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -6,6 +7,7 @@ import 'package:uni/view/Pages/secondary_page_view.dart';
 import 'package:uni/view/Pages/calendar_page_view.dart';
 import 'entities/exam.dart';
 import 'entities/lecture.dart';
+import 'entities/activity.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({Key key}) : super(key: key);
@@ -69,6 +71,16 @@ class _CalendarPageState extends SecondaryPageViewState
     return limitedExams;
   }
 
+  List<Activity> fetchActivities(String studentID) {
+    final _database = FirebaseDatabase.instance.ref();
+    final activities = <Activity>[];
+
+    _database.child(studentID).onValue.listen((event) {
+      final Map<dynamic, dynamic> data = event.snapshot.value;
+    });
+    return activities;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -84,7 +96,7 @@ class _CalendarPageState extends SecondaryPageViewState
 
   @override
   Widget getBody(BuildContext context) {
-    return StoreConnector<AppState, Tuple2<List<Exam>, List<Lecture>>>(
+    return StoreConnector<AppState, Tuple3<List<Exam>, List<Lecture>, List<Activity>>>(
       converter: (store) {
         final DateTime monday = DateTime.now().add(
             Duration (days: - (DateTime.now().weekday - 1)));
@@ -108,12 +120,16 @@ class _CalendarPageState extends SecondaryPageViewState
         final List<Lecture> lectures =
         limitLectures(store.state.content['schedule']);
 
-        return Tuple2(filteredExams, lectures);
+        final List<Activity> activities =
+        fetchActivities(store.state.content['profile'].email.substring(2, 11));
+
+        return Tuple3(filteredExams, lectures, activities);
       },
       builder: (context, activities) {
         return CalendarPageView(
             exams: activities.item1,
             lectures: activities.item2,
+            //TODO: add item3
             daysOfTheWeek: daysOfTheWeek,
             startDate: weekStartDate,
             endDate: weekEndDate,
