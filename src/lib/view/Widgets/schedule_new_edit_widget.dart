@@ -12,14 +12,18 @@ class NewEditDialog extends StatelessWidget {
         ),
         content: Form(
             child: Column(
-          children: [
-            createTextField('Nome'),
-            Padding(
-              padding: EdgeInsets.all(5),
-            ),
-            createTextField('Descrição')
-          ],
-        )),
+              children: [
+                createTextField('Nome'),
+                Padding(
+                  padding: EdgeInsets.all(5),
+                ),
+                createTextField('Descrição'),
+                Padding(
+                  padding: EdgeInsets.all(5),
+                ),
+                createDateButton(context),
+              ],
+            )),
         actions: [
           TextButton(onPressed: () {}, child: Text('Cancel')),
           TextButton(onPressed: () {}, child: Text('Accept'))
@@ -42,5 +46,50 @@ class NewEditDialog extends StatelessWidget {
                 : 'ex. Dress code: formal',
             labelText: field,
             labelStyle: TextStyle(color: Colors.black)));
+  }
+
+  Widget createDateButton(BuildContext context){
+    return OutlinedButton(
+        onPressed: () {datePicker(context);},
+        style: ButtonStyle(
+          padding: MaterialStateProperty.resolveWith<EdgeInsetsGeometry>(
+                  (states){
+                    return EdgeInsets.symmetric(vertical:15, horizontal: 100);
+                  }
+          ),
+          shape: MaterialStateProperty.resolveWith<OutlinedBorder>(
+              (states){
+                return RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                );
+              }
+          ),
+          side: MaterialStateProperty.resolveWith<BorderSide>(
+                  (states){
+                    return BorderSide(color:  Colors.black);
+                  }
+          )
+        ),
+        child: Text('Data'));
+  }
+
+  datePicker(BuildContext context){
+    DateTime now = DateTime.now();
+    showDatePicker(
+      context: context,
+      initialDate: DateTime(now.year, now.month, now.day),
+      firstDate: DateTime(now.year, now.month, now.day),
+      lastDate: DateTime(now.year + 1, now.month, now.day),
+      builder: (context, child){
+        return Theme(
+          data:Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: _darkRed
+            )
+          ),
+          child: child,
+        );
+      }
+    );
   }
 }
