@@ -17,7 +17,6 @@ class _NewEditDialogState extends State<NewEditDialog> {
   TimeOfDay startTime;
   TimeOfDay endTime;
 
-
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -28,11 +27,12 @@ class _NewEditDialogState extends State<NewEditDialog> {
         content: Form(
             child: Column(
           children: [
-            Flexible(child: createTextField('Nome')),
+            Flexible(child: createTextField('Nome', 'ex. Jantar de Curso')),
             Padding(
               padding: EdgeInsets.all(5),
             ),
-            Flexible(child: createTextField('Descrição')),
+            Flexible(
+                child: createTextField('Descrição', 'ex. Dress code: formal')),
             Padding(
               padding: EdgeInsets.all(5),
             ),
@@ -49,30 +49,30 @@ class _NewEditDialogState extends State<NewEditDialog> {
               padding: EdgeInsets.all(5),
             ),
             Flexible(child: createFrequencyField(context)),
+            Padding(
+              padding: EdgeInsets.all(5),
+            ),
+            Flexible(child: createColorField(context)),
           ],
         )),
         actions: [
-          TextButton(onPressed: () {}, child: Text('Cancel')),
-          TextButton(onPressed: () {}, child: Text('Accept'))
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel')),
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Accept'))
         ]);
   }
 
-  Widget createTextField(String field) {
+  Widget createTextField(String labelText, String hintText) {
     return TextFormField(
         cursorColor: _darkRed,
-        decoration: InputDecoration(
-            contentPadding: EdgeInsets.all(10),
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide(color: Colors.grey)),
-            focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide(color: _darkRed)),
-            hintText: (field == 'Nome')
-                ? 'ex. Jantar de Curso'
-                : 'ex. Dress code: formal',
-            labelText: field,
-            labelStyle: TextStyle(color: Colors.black)));
+        decoration: formFieldDecoration(hintText, labelText));
   }
 
   Widget createDateField(BuildContext context) {
@@ -86,17 +86,7 @@ class _NewEditDialogState extends State<NewEditDialog> {
         await _selectDate(context);
         _dateCtrl.text = DateFormat('yyyy/MM/dd').format(date);
       },
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.all(10),
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide(color: Colors.grey)),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide(color: _darkRed)),
-          hintText: DateFormat('yyyy/MM/dd').format(selectedDate),
-          labelText: 'Data',
-          labelStyle: TextStyle(color: Colors.black)),
+      decoration: formFieldDecoration('', 'Data'),
       validator: (String value) {
         if (value.isEmpty) {
           return 'Data requerida.';
@@ -111,20 +101,11 @@ class _NewEditDialogState extends State<NewEditDialog> {
       enableInteractiveSelection: false,
       controller: controller,
       onTap: () async {
-        FocusScope.of(context).requestFocus(new FocusNode());
+        FocusScope.of(context).requestFocus(FocusNode());
         await _selectTime(context);
-         controller.text = startTime.format(context);
+        controller.text = startTime.format(context);
       },
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.all(10),
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide(color: Colors.grey)),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide(color: _darkRed)),
-          labelText: labelText,
-          labelStyle: TextStyle(color: Colors.black)),
+      decoration: formFieldDecoration('', labelText),
       validator: (String value) {
         if (value.isEmpty) {
           return 'Hora requerida.';
@@ -136,17 +117,7 @@ class _NewEditDialogState extends State<NewEditDialog> {
 
   Widget createFrequencyField(BuildContext context) {
     return DropdownButtonFormField(
-        decoration: InputDecoration(
-            contentPadding: EdgeInsets.all(10),
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide(color: Colors.grey)),
-            focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide(color: _darkRed)),
-            hintText: 'Frequência',
-            labelText: 'Frequência',
-            labelStyle: TextStyle(color: Colors.black)),
+        decoration: formFieldDecoration('Escolhe uma frequência', 'Frequência'),
         items: <String>[
           'Não repetir',
           'Todos os dias',
@@ -159,6 +130,26 @@ class _NewEditDialogState extends State<NewEditDialog> {
           );
         }).toList(),
         onChanged: (String newValue) {});
+  }
+
+  Widget createColorField(BuildContext context) {
+    return DropdownButtonFormField(
+        decoration: formFieldDecoration('Escolhe uma cor', 'Cor'),
+        items: <Color>[
+          Colors.yellow,
+          Colors.blue,
+          Colors.red,
+          Colors.green,
+          Colors.purple,
+          Colors.brown
+        ].map<DropdownMenuItem<Color>>((Color value) {
+          return DropdownMenuItem<Color>(
+            value: value,
+            child: Text('                                           ',
+                style: TextStyle(backgroundColor: value)),
+          );
+        }).toList(),
+        onChanged: (Color newValue) {});
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -182,13 +173,13 @@ class _NewEditDialogState extends State<NewEditDialog> {
       });
     }
   }
-  
+
   Future<void> _selectTime(BuildContext context) async {
     final now = TimeOfDay.now();
     final TimeOfDay picked = await showTimePicker(
-      context: context,
-      initialTime: now,
-      builder: (context, child) {
+        context: context,
+        initialTime: now,
+        builder: (context, child) {
           return Theme(
             data: Theme.of(context)
                 .copyWith(colorScheme: ColorScheme.light(primary: _darkRed)),
@@ -200,5 +191,19 @@ class _NewEditDialogState extends State<NewEditDialog> {
         startTime = picked;
       });
     }
+  }
+
+  InputDecoration formFieldDecoration(String hintText, labelText) {
+    return InputDecoration(
+        contentPadding: EdgeInsets.all(10),
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: BorderSide(color: Colors.grey)),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: BorderSide(color: _darkRed)),
+        hintText: hintText,
+        labelText: labelText,
+        labelStyle: TextStyle(color: Colors.black));
   }
 }
