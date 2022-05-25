@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:uni/view/Widgets/schedule_new_edit_widget.dart';
 
 const Color _darkRed = Color.fromARGB(255, 0x75, 0x17, 0x1e);
-
 class EditWidget extends StatefulWidget {
   @override
   _EditWidgetState createState() => _EditWidgetState();
