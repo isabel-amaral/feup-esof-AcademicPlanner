@@ -55,6 +55,7 @@ class _NewEditDialogState extends State<NewEditDialog> {
             Flexible(child: createColorField(context)),
           ],
         )),
+        /*
         actions: [
           TextButton(
               onPressed: () {
@@ -66,7 +67,7 @@ class _NewEditDialogState extends State<NewEditDialog> {
                 Navigator.of(context).pop();
               },
               child: Text('Accept'))
-        ]);
+        ]*/);
   }
 
   Widget createTextField(String labelText, String hintText) {
