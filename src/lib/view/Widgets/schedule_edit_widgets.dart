@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:uni/view/Widgets/schedule_new_edit_widget.dart';
+import 'package:uni/view/Widgets/add_activity_form.dart';
 
 const Color _darkRed = Color.fromARGB(255, 0x75, 0x17, 0x1e);
+
 class EditWidget extends StatefulWidget {
   @override
   _EditWidgetState createState() => _EditWidgetState();
@@ -80,11 +81,13 @@ class _EditWidgetState extends State<EditWidget> {
             primary: Theme.of(context).primaryColor,
             elevation: 10),
         onPressed: () {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return NewEditDialog();
-              });
+          if (key == 'add-activity-button') {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AddActivityDialog();
+                });
+          }
         },
       ),
     );

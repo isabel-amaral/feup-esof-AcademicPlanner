@@ -3,12 +3,12 @@ import 'package:intl/intl.dart';
 
 const Color _darkRed = Color.fromARGB(255, 0x75, 0x17, 0x1e);
 
-class NewEditDialog extends StatefulWidget {
+class AddActivityDialog extends StatefulWidget {
   @override
-  _NewEditDialogState createState() => _NewEditDialogState();
+  _AddActivityDialogState createState() => _AddActivityDialogState();
 }
 
-class _NewEditDialogState extends State<NewEditDialog> {
+class _AddActivityDialogState extends State<AddActivityDialog> {
   final TextEditingController _dateCtrl = TextEditingController();
   final TextEditingController _startTimeCtrl = TextEditingController();
   final TextEditingController _endTimeCtrl = TextEditingController();
@@ -20,44 +20,45 @@ class _NewEditDialogState extends State<NewEditDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      scrollable: true,
         title: Text(
           'Novo Evento',
           textAlign: TextAlign.center,
         ),
         content: Form(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
           children: [
-            Flexible(child: createTextField('Nome', 'ex. Jantar de Curso')),
+            createTextField('Nome', 'ex. Jantar de Curso'),
             Padding(
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.all(10),
             ),
-            Flexible(
-                child: createTextField('Descrição', 'ex. Dress code: formal')),
+            createTextField('Descrição', 'ex. Dress code: formal'),
             Padding(
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.all(10),
             ),
-            Flexible(child: createDateField(context)),
+            createDateField(context),
             Padding(
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.all(10),
             ),
-            Flexible(child: createTimeField('Hora inicial', _startTimeCtrl)),
+            createTimeField('Hora inicial', _startTimeCtrl),
             Padding(
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.all(10),
             ),
-            Flexible(child: createTimeField('Hora final', _endTimeCtrl)),
+            createTimeField('Hora final', _endTimeCtrl),
             Padding(
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.all(10),
             ),
-            Flexible(child: createFrequencyField(context)),
+            createFrequencyField(context),
             Padding(
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.all(10),
             ),
-            Flexible(child: createColorField(context)),
+            createColorField(context),
           ],
         )),
-        /*
+        
         actions: [
-          TextButton(
+          /*TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -67,7 +68,7 @@ class _NewEditDialogState extends State<NewEditDialog> {
                 Navigator.of(context).pop();
               },
               child: Text('Accept'))
-        ]*/);
+        */]);
   }
 
   Widget createTextField(String labelText, String hintText) {
