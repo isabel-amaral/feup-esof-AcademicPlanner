@@ -28,33 +28,33 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
         content: Form(
             child: Column(
               mainAxisSize: MainAxisSize.min,
-          children: [
-            createTextField('Nome', 'ex. Jantar de Curso'),
-            Padding(
-              padding: EdgeInsets.all(10),
-            ),
-            createTextField('Descrição', 'ex. Dress code: formal'),
-            Padding(
-              padding: EdgeInsets.all(10),
-            ),
-            createDateField(context),
-            Padding(
-              padding: EdgeInsets.all(10),
-            ),
-            createTimeField('Hora inicial', _startTimeCtrl),
-            Padding(
-              padding: EdgeInsets.all(10),
-            ),
-            createTimeField('Hora final', _endTimeCtrl),
-            Padding(
-              padding: EdgeInsets.all(10),
-            ),
-            createFrequencyField(context),
-            Padding(
-              padding: EdgeInsets.all(10),
-            ),
-            createColorField(context),
-          ],
+              children: [
+                createTextField('Nome', 'ex. Jantar de Curso'),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                ),
+                createTextField('Descrição', 'ex. Dress code: formal'),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                ),
+                createDateField(context),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                ),
+                createTimeField('Hora inicial', _startTimeCtrl),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                ),
+                createTimeField('Hora final', _endTimeCtrl),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                ),
+                createFrequencyField(context),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                ),
+                createColorField(context),
+              ],
         )),
         
         actions: [
