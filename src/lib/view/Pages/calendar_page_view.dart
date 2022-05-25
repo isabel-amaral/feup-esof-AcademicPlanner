@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:uni/model/entities/activity.dart';
 import 'package:uni/model/entities/exam.dart';
 import 'package:uni/model/entities/lecture.dart';
+import 'package:uni/view/Widgets/activity_slot.dart';
 import 'package:uni/view/Widgets/page_title.dart';
 import 'package:uni/view/Widgets/schedule_edit_widgets.dart';
 import 'package:uni/view/Widgets/schedule_row.dart';
@@ -129,6 +131,19 @@ class CalendarPageView extends StatelessWidget {
 
   Widget createDailySchedule(BuildContext context, int i) {
     final List<Widget> dailyActivities = [];
+    final Activity a =
+    Activity(name: "Jantar de Curso",
+        startingDate: DateTime.now(),
+        endingDate: DateTime.now().add(Duration(hours: 1)),
+        description: "Dress Code Formal",
+        colorLabel: Colors.orange);
+
+    dailyActivities.add(ActivitySlot (name: a.name,
+        description: a.description,
+        begin: a.startingDate,
+        end: a.endingDate,
+        color: a.colorLabel));
+
     for (Exam exam in exams) {
       if (exam.weekDay == daysOfTheWeek[i]) {
         dailyActivities.add(ScheduleRow(
