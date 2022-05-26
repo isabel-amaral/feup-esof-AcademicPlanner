@@ -23,10 +23,6 @@ class _CalendarPageState extends SecondaryPageViewState
   TabController tabController;
   ScrollController scrollViewController;
 
-  /* startDate and endDate are the dates at which the school year begins/ends */
-  //In the future these might have to be passed to CalendarPageView
-  DateTime startDate = DateTime(2021, 10, 18);
-  DateTime endDate = DateTime(2021, 7, 16);
   DateTime weekStartDate = DateTime.now().add(
       Duration (days: - (DateTime.now().weekday - 1)));
   DateTime weekEndDate = (DateTime.now().add(
