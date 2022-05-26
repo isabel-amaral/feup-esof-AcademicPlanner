@@ -113,7 +113,9 @@ class _CalendarPageState extends SecondaryPageViewState
         ));
       }
       else if (activity.frequency == Frequency.everyMonth &&
-               activity.startingDate.isBefore(weekStartDate)) {
+              (activity.startingDate.isBefore(weekStartDate) ||
+              (activity.startingDate.isAfter(weekStartDate) &&
+              (activity.startingDate.isBefore(weekEndDate))))) {
         final numMonths = DateTime.now().difference(activity.startingDate).inDays ~/ 28;
         final DateTime currentMonth = activity.startingDate.add(Duration (days: numMonths*28));
         if (currentMonth.isAfter(weekStartDate) && currentMonth.isBefore(weekEndDate)) {
