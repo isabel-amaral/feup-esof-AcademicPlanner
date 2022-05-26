@@ -84,12 +84,13 @@ class _CalendarPageState extends SecondaryPageViewState
         for (int i = 0; i < daysOfTheWeek.length; i++) {
           final currentDay = weekStartDate.add(Duration (days: i));
           if (activity.startingDate.isBefore(currentDay)) {
+            final numDays = currentDay.weekday - activity.startingDate.weekday;
             limitedActivities.add(
               Activity(
                   name: activity.name,
                   description: activity.description,
-                  startingDate: activity.startingDate.add(Duration (days: i)),
-                  endingDate: activity.endingDate.add(Duration (days: i)),
+                  startingDate: activity.startingDate.add(Duration (days: numDays)),
+                  endingDate: activity.endingDate.add(Duration (days: numDays)),
                   colorLabel: activity.colorLabel
             ));
           }
