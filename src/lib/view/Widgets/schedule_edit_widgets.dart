@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uni/view/Widgets/add_activity_form.dart';
 
 const Color _darkRed = Color.fromARGB(255, 0x75, 0x17, 0x1e);
 
@@ -25,8 +26,7 @@ class _EditWidgetState extends State<EditWidget> {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
-        children: buttons
-    );
+        children: buttons);
   }
 
   Widget mainEditButton() {
@@ -80,7 +80,15 @@ class _EditWidgetState extends State<EditWidget> {
             padding: EdgeInsets.all(8.0),
             primary: Theme.of(context).primaryColor,
             elevation: 10),
-        onPressed: () {},
+        onPressed: () {
+          if (key == 'add-activity-button') {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AddActivityDialog();
+                });
+          }
+        },
       ),
     );
   }

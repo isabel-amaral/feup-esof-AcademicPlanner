@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 /// Stores information about an extra activity.
@@ -32,7 +33,7 @@ class Activity {
       @required DateTime this.startingDate,
       @required DateTime this.endingDate,
       Frequency this.frequency = Frequency.noRepetition,
-      Color this.colorLabel = null});
+      Color this.colorLabel = Colors.transparent});
 
   Map<String, dynamic> toMap(restaurantId) {
     return {
