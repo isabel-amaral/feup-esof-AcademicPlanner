@@ -20,7 +20,6 @@ enum Frequency {
 }
 
 class Activity {
-  final int id;
   String name;
   String description;
   DateTime startingDate;
@@ -28,8 +27,7 @@ class Activity {
   Frequency frequency;
   Color colorLabel;
 
-  Activity(
-      {this.id,
+  Activity({
       @required String this.name,
       String this.description = '',
       @required DateTime this.startingDate,
@@ -39,7 +37,6 @@ class Activity {
 
   Map<String, dynamic> toMap(restaurantId) {
     return {
-      'id': this.id,
       'name': this.name,
       'description': this.description,
       'startingDate': this.startingDate,
