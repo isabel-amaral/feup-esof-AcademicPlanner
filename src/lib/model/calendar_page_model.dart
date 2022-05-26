@@ -75,9 +75,73 @@ class _CalendarPageState extends SecondaryPageViewState
   List<Activity> limitActivities(activities) {
     final limitedActivities = <Activity>[];
     for (Activity activity in activities) {
-      if (activity.startingDate.isAfter(weekStartDate) &&
+      if (activity.frequency == Frequency.noRepetition &&
+          activity.startingDate.isAfter(weekStartDate) &&
           activity.startingDate.isBefore(weekEndDate)) {
         limitedActivities.add(activity);
+      }
+      else if (activity.frequency == Frequency.everyDay) {
+        for (int i = 0; i < daysOfTheWeek.length; i++) {
+          final currentDay = weekStartDate.add(Duration (days: i));
+          if (activity.startingDate.isBefore(currentDay)) {
+            limitedActivities.add(
+              Activity(
+                  name: activity.name,
+                  description: activity.description,
+                  startingDate: activity.startingDate.add(Duration (days: i)),
+                  endingDate: activity.endingDate.add(Duration (days: i)),
+                  colorLabel: activity.colorLabel
+            ));
+          }
+        }
+      }
+      else if (activity.frequency == Frequency.everyWeek &&
+              (activity.startingDate.isBefore(weekStartDate)) || 
+              (activity.startingDate.isAfter(weekStartDate) &&
+              (activity.startingDate.isBefore(weekEndDate)))) {
+        final DateTime startingWeek =
+          activity.startingDate.add(Duration (days: - (DateTime.now().weekday - 1)));
+        final numDays = weekStartDate.difference(startingWeek).inDays;
+        limitedActivities.add(
+          Activity(
+              name: activity.name,
+              description: activity.description,
+              startingDate: activity.startingDate.add(Duration (days: numDays)),
+              endingDate: activity.endingDate.add(Duration (days: numDays)),
+              colorLabel: activity.colorLabel
+        ));
+      }
+      else if (activity.frequency == Frequency.everyMonth &&
+               activity.startingDate.isBefore(weekStartDate)) {
+        final numMonths = DateTime.now().difference(activity.startingDate).inDays ~/ 28;
+        final DateTime currentMonth = activity.startingDate.add(Duration (days: numMonths*28));
+        if (currentMonth.isAfter(weekStartDate) && currentMonth.isBefore(weekEndDate)) {
+          limitedActivities.add(
+            Activity(
+              name: activity.name,
+              description: activity.description,
+              startingDate: currentMonth,
+              endingDate: activity.endingDate.add(Duration (days: numMonths*28)),
+              colorLabel: activity.colorLabel,
+          ));
+        }
+      }
+      else if (activity.frequency == Frequency.everyYear) {
+        final numYears = DateTime.now().difference(activity.startingDate).inDays ~/ 365;
+        final DateTime currentYear = DateTime(activity.startingDate.year+numYears,
+            activity.startingDate.month, activity.startingDate.day,
+            activity.startingDate.hour, activity.startingDate.minute);
+        if (currentYear.isAfter(weekStartDate) && currentYear.isBefore(weekEndDate)) {
+          limitedActivities.add(
+            Activity(
+                name: activity.name,
+                description: activity.description,
+                startingDate: currentYear,
+                endingDate: DateTime(activity.endingDate.year+numYears,
+                    activity.endingDate.month, activity.endingDate.day,
+                    activity.endingDate.hour, activity.endingDate.minute)
+          ));
+        }
       }
     }
     return limitedActivities;
