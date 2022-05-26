@@ -101,7 +101,9 @@ class MyAppState extends State<MyApp> {
                     page: HomePageView(), settings: settings);
               case '/' + Constants.navCalendar:
                 return PageTransition.makePageTransition(
-                    page: CalendarPage(), settings: settings);
+                    page: CalendarPage(
+                        context: context
+                    ), settings: settings);
               case '/' + Constants.navSchedule:
                 return PageTransition.makePageTransition(
                     page: SchedulePage(), settings: settings);

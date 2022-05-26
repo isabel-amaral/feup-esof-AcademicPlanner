@@ -10,14 +10,23 @@ import 'entities/lecture.dart';
 import 'entities/activity.dart';
 
 class CalendarPage extends StatefulWidget {
-  const CalendarPage({Key key}) : super(key: key);
+  final BuildContext context;
+
+  CalendarPage({Key key, this.context}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _CalendarPageState();
+  State<StatefulWidget> createState() => _CalendarPageState(
+      context: context
+  );
 }
 
 class _CalendarPageState extends SecondaryPageViewState
     with SingleTickerProviderStateMixin {
+  @override
+  final BuildContext context;
+
+  _CalendarPageState({this.context});
+
   final int weekDay = DateTime.now().weekday;
 
   TabController tabController;
@@ -73,12 +82,14 @@ class _CalendarPageState extends SecondaryPageViewState
     return limitedExams;
   }
 
-  void fetchActivities(String studentID) {
+  List<Activity> fetchActivities() {
+    final studentID =
+    StoreProvider.of<AppState>(context).state.content['profile'].email.substring(2,11);
     final _database = FirebaseDatabase.instance.ref();
-    final activities = <Activity>[];
 
-    _database.child(studentID).once().then((value) {
-      final Map<dynamic, dynamic> data = value.snapshot.value;
+    _database.child(studentID).get().then((snapshot) {
+      final activities = <Activity>[];
+      final Map<dynamic, dynamic> data = snapshot.value;
 
       for (String activity in data['activities'].keys) {
         final String name = activity;
@@ -96,17 +107,16 @@ class _CalendarPageState extends SecondaryPageViewState
         final DateTime startingDate = DateTime(year, month, day, startHour, startMin);
         final DateTime endingDate = DateTime(year, month, day, endHour, endMin);
 
-        final Activity _activity = Activity(
+        final Activity a = Activity(
             name: name,
             description: description,
             startingDate: startingDate,
             endingDate: endingDate,
             frequency: frequency,
             colorLabel: colorLabel);
-        activities.add(_activity);
+        activities.add(a);
       }
-
-      this.activities = activities;
+      return activities;
     });
   }
 
@@ -125,6 +135,8 @@ class _CalendarPageState extends SecondaryPageViewState
 
   @override
   Widget getBody(BuildContext context) {
+    this.activities = fetchActivities();
+
     return StoreConnector<AppState, Tuple2<List<Exam>, List<Lecture>>>(
       converter: (store) {
         final DateTime monday = DateTime.now().add(
@@ -148,8 +160,6 @@ class _CalendarPageState extends SecondaryPageViewState
 
         final List<Lecture> lectures =
         limitLectures(store.state.content['schedule']);
-
-        fetchActivities(store.state.content['profile'].email.substring(2, 11));
 
         return Tuple2(filteredExams, lectures);
       },
