@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:uni/model/entities/exam.dart';
+import 'package:uni/model/entities/lecture.dart';
 import 'package:uni/view/Widgets/add_activity_form.dart';
 
 const Color _darkRed = Color.fromARGB(255, 0x75, 0x17, 0x1e);
 
 class EditWidget extends StatefulWidget {
+  final List<Exam> exams;
+  final List<Lecture> lectures;
+
+  EditWidget(this.exams, this.lectures);
+
   @override
   _EditWidgetState createState() => _EditWidgetState();
 }
@@ -85,8 +92,9 @@ class _EditWidgetState extends State<EditWidget> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return AddActivityDialog();
-                });
+                  return AddActivityDialog(this.widget.exams, this.widget.lectures);
+                }
+            );
           }
         },
       ),
