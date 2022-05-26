@@ -97,9 +97,9 @@ class _CalendarPageState extends SecondaryPageViewState
         }
       }
       else if (activity.frequency == Frequency.everyWeek &&
-              (activity.startingDate.isBefore(weekStartDate)) || 
+              (activity.startingDate.isBefore(weekStartDate) ||
               (activity.startingDate.isAfter(weekStartDate) &&
-              (activity.startingDate.isBefore(weekEndDate)))) {
+              (activity.startingDate.isBefore(weekEndDate))))) {
         final DateTime startingWeek =
           activity.startingDate.add(Duration (days: - (DateTime.now().weekday - 1)));
         final numDays = weekStartDate.difference(startingWeek).inDays;
@@ -140,7 +140,8 @@ class _CalendarPageState extends SecondaryPageViewState
                 startingDate: currentYear,
                 endingDate: DateTime(activity.endingDate.year+numYears,
                     activity.endingDate.month, activity.endingDate.day,
-                    activity.endingDate.hour, activity.endingDate.minute)
+                    activity.endingDate.hour, activity.endingDate.minute),
+                colorLabel: activity.colorLabel
           ));
         }
       }
