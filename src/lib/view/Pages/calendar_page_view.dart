@@ -138,12 +138,6 @@ class CalendarPageView extends StatelessWidget {
         description: "Dress Code Formal",
         colorLabel: Colors.orange);
 
-    dailyActivities.add(ActivitySlot (name: a.name,
-        description: a.description,
-        begin: a.startingDate,
-        end: a.endingDate,
-        color: a.colorLabel));
-
     for (Exam exam in exams) {
       if (exam.weekDay == daysOfTheWeek[i]) {
         dailyActivities.add(ScheduleRow(
@@ -154,6 +148,13 @@ class CalendarPageView extends StatelessWidget {
             type: exam.examType));
       }
     }
+
+    dailyActivities.add(ActivitySlot (name: a.name,
+        description: a.description,
+        begin: a.startingDate,
+        end: a.endingDate,
+        color: a.colorLabel));
+
     for (Lecture lecture in lectures) {
       if (lecture.day == i) {
         dailyActivities.add(ScheduleSlot(
