@@ -14,6 +14,7 @@ const Color _darkRed = Color.fromARGB(255, 0x75, 0x17, 0x1e);
 class CalendarPageView extends StatelessWidget {
   final List<Exam> exams;
   final List<Lecture> lectures;
+  final List<Activity> activities;
   final DateTime startDate;
   final DateTime endDate;
   final List<String> daysOfTheWeek;
@@ -25,6 +26,7 @@ class CalendarPageView extends StatelessWidget {
       {Key key,
         @required this.exams,
         @required this.lectures,
+        @required this.activities,
         @required this.startDate,
         @required this.endDate,
         @required this.daysOfTheWeek,
@@ -131,12 +133,6 @@ class CalendarPageView extends StatelessWidget {
 
   Widget createDailySchedule(BuildContext context, int i) {
     final List<Widget> dailyActivities = [];
-    final Activity a =
-    Activity(name: "Jantar de Curso",
-        startingDate: DateTime.now(),
-        endingDate: DateTime.now().add(Duration(hours: 1)),
-        description: "Dress Code Formal",
-        colorLabel: Colors.orange);
 
     for (Exam exam in exams) {
       if (exam.weekDay == daysOfTheWeek[i]) {
@@ -149,11 +145,17 @@ class CalendarPageView extends StatelessWidget {
       }
     }
 
-    dailyActivities.add(ActivitySlot (name: a.name,
-        description: a.description,
-        begin: a.startingDate,
-        end: a.endingDate,
-        color: a.colorLabel));
+    for (Activity activity in activities) {
+      if (activity.startingDate.weekday == i+1) {
+        dailyActivities.add(ActivitySlot(
+          name: activity.name,
+          description: activity.description,
+          begin: activity.startingDate,
+          end: activity.endingDate,
+          color: activity.colorLabel,
+        ));
+      }
+    }
 
     for (Lecture lecture in lectures) {
       if (lecture.day == i) {
