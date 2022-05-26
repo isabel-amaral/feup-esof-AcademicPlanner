@@ -4,8 +4,10 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tuple/tuple.dart';
 import 'package:uni/view/Pages/secondary_page_view.dart';
 import 'package:uni/view/Pages/calendar_page_view.dart';
+import 'entities/activity.dart';
 import 'entities/exam.dart';
 import 'entities/lecture.dart';
+import 'utils/create_activities.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({Key key}) : super(key: key);
@@ -21,10 +23,6 @@ class _CalendarPageState extends SecondaryPageViewState
   TabController tabController;
   ScrollController scrollViewController;
 
-  /* startDate and endDate are the dates at which the school year begins/ends */
-  //In the future these might have to be passed to CalendarPageView
-  DateTime startDate = DateTime(2021, 10, 18);
-  DateTime endDate = DateTime(2021, 7, 16);
   DateTime weekStartDate = DateTime.now().add(
       Duration (days: - (DateTime.now().weekday - 1)));
   DateTime weekEndDate = (DateTime.now().add(
@@ -62,11 +60,91 @@ class _CalendarPageState extends SecondaryPageViewState
   List<Exam> limitExams(exams) {
     final limitedExams = <Exam>[];
     for (Exam exam in exams) {
-      if (exam.date.isAfter(weekStartDate) && exam.date.isBefore(weekEndDate)) {
+      if (exam.date.isAfter(weekStartDate) &&
+          exam.date.isBefore(weekEndDate)) {
         limitedExams.add(exam);
       }
     }
     return limitedExams;
+  }
+
+  List<Activity> limitActivities(activities) {
+    final limitedActivities = <Activity>[];
+    for (Activity activity in activities) {
+      if (activity.frequency == Frequency.noRepetition &&
+          activity.startingDate.isAfter(weekStartDate) &&
+          activity.startingDate.isBefore(weekEndDate)) {
+        limitedActivities.add(activity);
+      }
+      else if (activity.frequency == Frequency.everyDay) {
+        for (int i = 0; i < daysOfTheWeek.length; i++) {
+          final currentDay = weekStartDate.add(Duration (days: i));
+          if (activity.startingDate.isBefore(currentDay)) {
+            final numDays = currentDay.weekday - activity.startingDate.weekday;
+            limitedActivities.add(
+              Activity(
+                  name: activity.name,
+                  description: activity.description,
+                  startingDate: activity.startingDate.add(Duration (days: numDays)),
+                  endingDate: activity.endingDate.add(Duration (days: numDays)),
+                  colorLabel: activity.colorLabel
+            ));
+          }
+        }
+      }
+      else if (activity.frequency == Frequency.everyWeek &&
+              (activity.startingDate.isBefore(weekStartDate) ||
+              (activity.startingDate.isAfter(weekStartDate) &&
+              (activity.startingDate.isBefore(weekEndDate))))) {
+        final DateTime startingWeek =
+          activity.startingDate.add(Duration (days: - (DateTime.now().weekday - 1)));
+        final numDays = weekStartDate.difference(startingWeek).inDays;
+        limitedActivities.add(
+          Activity(
+              name: activity.name,
+              description: activity.description,
+              startingDate: activity.startingDate.add(Duration (days: numDays)),
+              endingDate: activity.endingDate.add(Duration (days: numDays)),
+              colorLabel: activity.colorLabel
+        ));
+      }
+      else if (activity.frequency == Frequency.everyMonth &&
+              (activity.startingDate.isBefore(weekStartDate) ||
+              (activity.startingDate.isAfter(weekStartDate) &&
+              (activity.startingDate.isBefore(weekEndDate))))) {
+        final numMonths = DateTime.now().difference(activity.startingDate).inDays ~/ 28;
+        final DateTime currentMonth = activity.startingDate.add(Duration (days: numMonths*28));
+        if (currentMonth.isAfter(weekStartDate) && currentMonth.isBefore(weekEndDate)) {
+          limitedActivities.add(
+            Activity(
+              name: activity.name,
+              description: activity.description,
+              startingDate: currentMonth,
+              endingDate: activity.endingDate.add(Duration (days: numMonths*28)),
+              colorLabel: activity.colorLabel,
+          ));
+        }
+      }
+      else if (activity.frequency == Frequency.everyYear) {
+        final numYears = DateTime.now().difference(activity.startingDate).inDays ~/ 365;
+        final DateTime currentYear = DateTime(activity.startingDate.year+numYears,
+            activity.startingDate.month, activity.startingDate.day,
+            activity.startingDate.hour, activity.startingDate.minute);
+        if (currentYear.isAfter(weekStartDate) && currentYear.isBefore(weekEndDate)) {
+          limitedActivities.add(
+            Activity(
+                name: activity.name,
+                description: activity.description,
+                startingDate: currentYear,
+                endingDate: DateTime(activity.endingDate.year+numYears,
+                    activity.endingDate.month, activity.endingDate.day,
+                    activity.endingDate.hour, activity.endingDate.minute),
+                colorLabel: activity.colorLabel
+          ));
+        }
+      }
+    }
+    return limitedActivities;
   }
 
   @override
@@ -98,7 +176,7 @@ class _CalendarPageState extends SecondaryPageViewState
 
         final List<Exam> exams = store.state.content['exams'];
         final Map<String, bool> filteredExamTypes =
-        store.state.content['filteredExams'];
+          store.state.content['filteredExams'];
         final List<Exam> filteredExams = limitExams(
             exams.where((exam) =>
             filteredExamTypes[Exam.getExamTypeLong(exam.examType)] ?? true)
@@ -106,14 +184,20 @@ class _CalendarPageState extends SecondaryPageViewState
         );
 
         final List<Lecture> lectures =
-        limitLectures(store.state.content['schedule']);
+          limitLectures(store.state.content['schedule']);
 
         return Tuple2(filteredExams, lectures);
       },
-      builder: (context, activities) {
+      builder: (context, schedule) {
+        final CreateActivities activities = CreateActivities();
+        activities.createActivities();
+        final List<Activity> limitedActivities =
+          limitActivities(activities.activities);
+
         return CalendarPageView(
-            exams: activities.item1,
-            lectures: activities.item2,
+            exams: schedule.item1,
+            lectures: schedule.item2,
+            activities: limitedActivities,
             daysOfTheWeek: daysOfTheWeek,
             startDate: weekStartDate,
             endDate: weekEndDate,
