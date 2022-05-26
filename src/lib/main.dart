@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -40,16 +39,16 @@ SentryEvent beforeSend(SentryEvent event) {
 Future<void> main() async {
   OnStartUp.onStart(state);
   await SentryFlutter.init(
-    (options) {
+        (options) {
       options.dsn =
-          'https://a2661645df1c4992b24161010c5e0ecb@o553498.ingest.sentry.io/5680848';
+      'https://a2661645df1c4992b24161010c5e0ecb@o553498.ingest.sentry.io/5680848';
     },
     appRunner: () => {runApp(MyApp())},
   );
 }
 
 /// Manages the state of the app
-/// 
+///
 /// This class is necessary to track the app's state for
 /// the current execution
 class MyApp extends StatefulWidget {
@@ -68,7 +67,6 @@ class MyAppState extends State<MyApp> {
   MyAppState({@required this.state}) {}
 
   final Store<AppState> state;
-  final Future<FirebaseApp> _fbApp = Firebase.initializeApp();
 
   @override
   Widget build(BuildContext context) {
@@ -80,18 +78,7 @@ class MyAppState extends State<MyApp> {
       child: MaterialApp(
           title: 'uni',
           theme: applicationLightTheme,
-          home: FutureBuilder(
-            future: _fbApp,
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return Text('Somethind went wrong!');
-              } else if (snapshot.hasData) {
-                return SplashScreen();
-              } else {
-                return Center(child: CircularProgressIndicator());
-              }
-            },
-          ),
+          home: SplashScreen(),
           navigatorKey: NavigationService.navigatorKey,
           // ignore: missing_return
           onGenerateRoute: (RouteSettings settings) {
@@ -101,9 +88,7 @@ class MyAppState extends State<MyApp> {
                     page: HomePageView(), settings: settings);
               case '/' + Constants.navCalendar:
                 return PageTransition.makePageTransition(
-                    page: CalendarPage(
-                        context: context
-                    ), settings: settings);
+                    page: CalendarPage(), settings: settings);
               case '/' + Constants.navSchedule:
                 return PageTransition.makePageTransition(
                     page: SchedulePage(), settings: settings);
@@ -132,6 +117,6 @@ class MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     Timer.periodic(Duration(seconds: 60),
-        (Timer t) => state.dispatch(SetCurrentTimeAction(DateTime.now())));
+            (Timer t) => state.dispatch(SetCurrentTimeAction(DateTime.now())));
   }
 }

@@ -106,7 +106,7 @@ class CalendarPageView extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
                     child: Text(currentDay.day.toString() + '/' + currentDay.month.toString(),
-                    key: Key('calendar-page-tab-day-$i')),
+                        key: Key('calendar-page-tab-day-$i')),
                   )
                 ]
             )
@@ -161,9 +161,11 @@ class CalendarPageView extends StatelessWidget {
         ],
       );
     }
-    return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: dailyActivities
+    return SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: dailyActivities,
+        )
     );
   }
 }
