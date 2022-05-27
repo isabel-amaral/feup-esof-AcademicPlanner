@@ -4,7 +4,7 @@ import 'package:uni/model/entities/activity.dart';
 class CreateActivities {
   List<Activity> activities = [];
 
-  void createActivities() {
+  List<Activity> createActivities() {
     activities.add(Activity(
         name: 'jantar',
         description: 'jantar com grupo de esof',
@@ -28,5 +28,6 @@ class CreateActivities {
         frequency:Frequency.noRepetition,
         colorLabel: Colors.red)
     );
+    return activities;
   }
 }

@@ -20,7 +20,8 @@ class CalendarPageView extends StatelessWidget {
   final List<String> daysOfTheWeek;
   final TabController tabController;
   final ScrollController scrollViewController;
-  final Function callback;
+  final Function setDates;
+  final Function setActivities;
 
   CalendarPageView(
       {Key key,
@@ -31,7 +32,8 @@ class CalendarPageView extends StatelessWidget {
         @required this.endDate,
         @required this.daysOfTheWeek,
         @required this.tabController,
-        @required this.callback,
+        @required this.setDates,
+        @required this.setActivities,
         this.scrollViewController});
 
   @override
@@ -48,7 +50,7 @@ class CalendarPageView extends StatelessWidget {
                 PageTitle(name: 'Agenda'),
                 WeekDisplayButtons(
                     currentStartDate: startDate,
-                    callback: callback
+                    setDates: setDates
                 ),
                 TabBar(
                   controller: tabController,
@@ -72,7 +74,8 @@ class CalendarPageView extends StatelessWidget {
               padding: EdgeInsets.all(10),
               child: Align(
                 alignment: Alignment.bottomRight,
-                child: EditWidget(this.exams, this.lectures, this.activities),
+                child: EditWidget(this.exams, this.lectures,
+                    this.activities, this.setActivities),
               )
           )
         ]

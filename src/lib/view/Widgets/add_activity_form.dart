@@ -12,8 +12,9 @@ class AddActivityDialog extends StatefulWidget {
   final List<Exam> exams;
   final List<Lecture> lectures;
   final List<Activity> activities;
+  final Function setActivities;
 
-  AddActivityDialog(this.exams, this.lectures, this.activities);
+  AddActivityDialog(this.exams, this.lectures, this.activities, this.setActivities);
 
   @override
   _AddActivityDialogState createState() => _AddActivityDialogState();
@@ -52,34 +53,34 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
         ),
         content: Form(
             child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            createTextField('Nome', 'ex. Jantar de Curso'),
-            Padding(
-              padding: EdgeInsets.all(10),
-            ),
-            createTextField('Descrição', 'ex. Dress code: formal'),
-            Padding(
-              padding: EdgeInsets.all(10),
-            ),
-            createDateField(context),
-            Padding(
-              padding: EdgeInsets.all(10),
-            ),
-            createStartTimeField(),
-            Padding(
-              padding: EdgeInsets.all(10),
-            ),
-            createEndTimeField(),
-            Padding(
-              padding: EdgeInsets.all(10),
-            ),
-            createFrequencyField(context),
-            Padding(
-              padding: EdgeInsets.all(10),
-            ),
-            createColorField(context),
-          ],
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                createTextField('Nome', 'ex. Jantar de Curso'),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                ),
+                createTextField('Descrição', 'ex. Dress code: formal'),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                ),
+                createDateField(context),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                ),
+                createStartTimeField(),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                ),
+                createEndTimeField(),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                ),
+                createFrequencyField(context),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                ),
+                createColorField(context),
+              ],
         )),
         actions: [
           TextButton(
@@ -94,8 +95,9 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
                       context: context,
                       builder: (BuildContext context) {
                         return FormMissingValuesDialog();
-                      });
+                  });
                 }
+
                 final Activity activity = Activity(
                     name: _nameCtrl.text,
                     description: _descCtrl.text,
@@ -104,17 +106,18 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
                     endingDate: DateTime(date.year, date.month, date.day,
                         endTime.hour, endTime.minute),
                     frequency: freq,
-                    colorLabel: color);
+                    colorLabel: color
+                );
                 if (checkForOverlap(activity)) {
                   showDialog(
                       context: context,
                       builder: (BuildContext context) {
                         return ActivitityOverlapDialog();
-                      });
+                  });
                 }
               },
               child: Text('Accept'))
-        ]);
+          ]);
   }
 
   Widget createTextField(String labelText, String hintText) {

@@ -10,8 +10,9 @@ class EditWidget extends StatefulWidget {
   final List<Exam> exams;
   final List<Lecture> lectures;
   final List<Activity> activities;
+  final Function setActivities;
 
-  EditWidget(this.exams, this.lectures, this.activities);
+  EditWidget(this.exams, this.lectures, this.activities, this.setActivities);
 
   @override
   _EditWidgetState createState() => _EditWidgetState();
@@ -95,7 +96,8 @@ class _EditWidgetState extends State<EditWidget> {
                 context: context,
                 builder: (BuildContext context) {
                   return AddActivityDialog(this.widget.exams,
-                      this.widget.lectures, this.widget.activities);
+                      this.widget.lectures, this.widget.activities,
+                      this.widget.setActivities);
                 });
           }
         },

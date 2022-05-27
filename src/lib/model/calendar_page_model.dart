@@ -20,6 +20,9 @@ class _CalendarPageState extends SecondaryPageViewState
     with SingleTickerProviderStateMixin {
   final int weekDay = DateTime.now().weekday;
 
+  final CreateActivities createActivities = CreateActivities();
+  List<Activity> activities;
+
   TabController tabController;
   ScrollController scrollViewController;
 
@@ -41,6 +44,12 @@ class _CalendarPageState extends SecondaryPageViewState
     setState((){
       this.weekStartDate = start;
       this.weekEndDate = start.add(Duration(days: 6));
+    });
+  }
+
+  void setActivities(activities) {
+    setState(() {
+      this.activities = activities;
     });
   }
 
@@ -152,6 +161,7 @@ class _CalendarPageState extends SecondaryPageViewState
     super.initState();
     tabController = TabController(vsync: this, length: daysOfTheWeek.length);
     tabController.animateTo(0);
+    activities = createActivities.createActivities();
   }
 
   @override
@@ -189,11 +199,7 @@ class _CalendarPageState extends SecondaryPageViewState
         return Tuple2(filteredExams, lectures);
       },
       builder: (context, schedule) {
-        final CreateActivities activities = CreateActivities();
-        activities.createActivities();
-        final List<Activity> limitedActivities =
-          limitActivities(activities.activities);
-
+        final List<Activity> limitedActivities = limitActivities(activities);
         return CalendarPageView(
             exams: schedule.item1,
             lectures: schedule.item2,
@@ -203,7 +209,8 @@ class _CalendarPageState extends SecondaryPageViewState
             endDate: weekEndDate,
             tabController: tabController,
             scrollViewController: scrollViewController,
-            callback: setDates
+            setDates: setDates,
+            setActivities: setActivities
         );
       },
     );
