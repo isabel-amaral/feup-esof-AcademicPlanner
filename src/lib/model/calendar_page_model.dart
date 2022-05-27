@@ -51,12 +51,6 @@ class _CalendarPageState extends SecondaryPageViewState
     setState(() {
       this.activities = activities;
     });
-    for (Activity a in this.activities) {
-      print(a.name);
-      print(a.startingDate.day);
-      print(a.startingDate.month);
-      print(a.startingDate.year);
-    }
   }
 
   /// Limits lectures to one week
@@ -110,9 +104,9 @@ class _CalendarPageState extends SecondaryPageViewState
       else if (activity.frequency == Frequency.everyWeek &&
               (activity.startingDate.isBefore(weekStartDate) ||
               (activity.startingDate.isAfter(weekStartDate) &&
-                  (activity.startingDate.isBefore(weekEndDate))))) {
+              (activity.startingDate.isBefore(weekEndDate))))) {
         final DateTime startingWeek =
-        activity.startingDate.add(Duration (days: - (DateTime.now().weekday - 2)));
+        activity.startingDate.add(Duration (days: - (activity.startingDate.weekday - 1)));
         final numDays = weekStartDate.difference(startingWeek).inDays;
         limitedActivities.add(
             Activity(
