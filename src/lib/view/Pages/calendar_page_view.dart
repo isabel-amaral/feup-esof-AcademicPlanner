@@ -72,7 +72,7 @@ class CalendarPageView extends StatelessWidget {
               padding: EdgeInsets.all(10),
               child: Align(
                 alignment: Alignment.bottomRight,
-                child: EditWidget(),
+                child: EditWidget(this.exams, this.lectures, this.activities),
               )
           )
         ]
@@ -179,6 +179,7 @@ class CalendarPageView extends StatelessWidget {
         ],
       );
     }
+
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
