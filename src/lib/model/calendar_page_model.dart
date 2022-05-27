@@ -48,6 +48,7 @@ class _CalendarPageState extends SecondaryPageViewState
   }
 
   void setActivities(activities) {
+    print('Hello');
     setState(() {
       this.activities = activities;
     });
@@ -203,7 +204,8 @@ class _CalendarPageState extends SecondaryPageViewState
         return CalendarPageView(
             exams: schedule.item1,
             lectures: schedule.item2,
-            activities: limitedActivities,
+            activities: activities,
+            limitedActivities: limitedActivities,
             daysOfTheWeek: daysOfTheWeek,
             startDate: weekStartDate,
             endDate: weekEndDate,

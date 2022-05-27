@@ -15,6 +15,7 @@ class CalendarPageView extends StatelessWidget {
   final List<Exam> exams;
   final List<Lecture> lectures;
   final List<Activity> activities;
+  final List<Activity> limitedActivities;
   final DateTime startDate;
   final DateTime endDate;
   final List<String> daysOfTheWeek;
@@ -28,6 +29,7 @@ class CalendarPageView extends StatelessWidget {
         @required this.exams,
         @required this.lectures,
         @required this.activities,
+        @required this.limitedActivities,
         @required this.startDate,
         @required this.endDate,
         @required this.daysOfTheWeek,
@@ -148,7 +150,7 @@ class CalendarPageView extends StatelessWidget {
       }
     }
 
-    for (Activity activity in activities) {
+    for (Activity activity in limitedActivities) {
       if (activity.startingDate.weekday == i+1) {
         dailyActivities.add(ActivitySlot(
           name: activity.name,

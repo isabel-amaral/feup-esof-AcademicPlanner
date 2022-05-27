@@ -98,6 +98,10 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
                   });
                 }
 
+                if (color == null) {
+                  color = Colors.transparent;
+                }
+
                 final Activity activity = Activity(
                     name: _nameCtrl.text,
                     description: _descCtrl.text,
@@ -108,12 +112,17 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
                     frequency: freq,
                     colorLabel: color
                 );
+                print('Hello');
+                print(activity.colorLabel.toString());
                 if (checkForOverlap(activity)) {
                   showDialog(
                       context: context,
                       builder: (BuildContext context) {
                         return ActivitityOverlapDialog();
                   });
+                } else {
+                  Navigator.pop(context);
+                  widget.setActivities(widget.activities.add(activity));
                 }
               },
               child: Text('Accept'))
