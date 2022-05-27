@@ -72,7 +72,7 @@ class CalendarPageView extends StatelessWidget {
               padding: EdgeInsets.all(10),
               child: Align(
                 alignment: Alignment.bottomRight,
-                child: EditWidget(this.exams, this.lectures),
+                child: EditWidget(this.exams, this.lectures, this.activities),
               )
           )
         ]

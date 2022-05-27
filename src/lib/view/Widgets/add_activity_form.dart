@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:uni/model/entities/activity.dart';
 import 'package:uni/model/entities/exam.dart';
 import 'package:uni/model/entities/lecture.dart';
+import 'package:uni/view/Widgets/activity_form_missing_alert.dart';
 import 'package:uni/view/Widgets/activity_overlap_dialog.dart';
 
 const Color _darkRed = Color.fromARGB(255, 0x75, 0x17, 0x1e);
@@ -10,8 +11,9 @@ const Color _darkRed = Color.fromARGB(255, 0x75, 0x17, 0x1e);
 class AddActivityDialog extends StatefulWidget {
   final List<Exam> exams;
   final List<Lecture> lectures;
+  final List<Activity> activities;
 
-  AddActivityDialog(this.exams, this.lectures);
+  AddActivityDialog(this.exams, this.lectures, this.activities);
 
   @override
   _AddActivityDialogState createState() => _AddActivityDialogState();
@@ -87,21 +89,28 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
               child: Text('Cancel')),
           TextButton(
               onPressed: () {
+                if (!checkForMissingValues()) {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return FormMissingValuesDialog();
+                      });
+                }
                 final Activity activity = Activity(
-                  name: _nameCtrl.text,
-                  description: _descCtrl.text,
-                  startingDate: DateTime(date.year, date.month, date.day,
-                    startTime.hour, startTime.minute),
-                  endingDate: DateTime(date.year, date.month, date.day,
-                    endTime.hour, endTime.minute),
-                  frequency: freq,
-                  colorLabel: color);
+                    name: _nameCtrl.text,
+                    description: _descCtrl.text,
+                    startingDate: DateTime(date.year, date.month, date.day,
+                        startTime.hour, startTime.minute),
+                    endingDate: DateTime(date.year, date.month, date.day,
+                        endTime.hour, endTime.minute),
+                    frequency: freq,
+                    colorLabel: color);
                 if (checkForOverlap(activity)) {
                   showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return ActivitityOverlapDialog();
-                  });
+                      context: context,
+                      builder: (BuildContext context) {
+                        return ActivitityOverlapDialog();
+                      });
                 }
               },
               child: Text('Accept'))
@@ -317,45 +326,70 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
         labelStyle: TextStyle(color: Colors.black));
   }
 
+  bool checkForMissingValues() {
+    return (_nameCtrl.text != null &&
+        _descCtrl.text != null &&
+        startTime != null &&
+        endTime != null &&
+        freq != null &&
+        color != null);
+  }
+
   bool checkForOverlap(Activity newActivity) {
     bool dateOverlap({int day = 0, int month = 0, int year = 0}) {
-      final DateTime futureActivityDate = DateTime(
+      final DateTime futureActivityStartDate = DateTime(
           newActivity.startingDate.year + year,
           newActivity.startingDate.month + month,
           newActivity.startingDate.day + day,
           newActivity.startingDate.hour,
           newActivity.startingDate.minute);
 
+      final DateTime futureActivityEndDate = DateTime(
+          newActivity.endingDate.year + year,
+          newActivity.endingDate.month + month,
+          newActivity.endingDate.day + day,
+          newActivity.endingDate.hour,
+          newActivity.endingDate.minute);
+
       for (Exam exam in this.widget.exams) {
-        if (futureActivityDate.isBefore(DateTime(
-                exam.date.year,
-                exam.date.month,
-                exam.date.day,
-                int.parse(exam.end.split(':')[0]),
-                int.parse(exam.end.split(':')[1]))) &&
-            futureActivityDate.isAfter(DateTime(
-                exam.date.year,
-                exam.date.month,
-                exam.date.day,
-                int.parse(exam.begin.split(':')[0]),
-                int.parse(exam.begin.split(':')[1])))) {
-          return true;
-        }
+          if (futureActivityStartDate.isBefore(DateTime(
+                  exam.date.year,
+                  exam.date.month,
+                  exam.date.day,
+                  int.parse(exam.end.split(':')[0]),
+                  int.parse(exam.end.split(':')[1]))) &&
+              futureActivityEndDate.isAfter(DateTime(
+                  exam.date.year,
+                  exam.date.month,
+                  exam.date.day,
+                  int.parse(exam.begin.split(':')[0]),
+                  int.parse(exam.begin.split(':')[1])))) {
+            return true;
+          }
       }
 
       for (Lecture lecture in this.widget.lectures) {
-        if (futureActivityDate.isBefore(DateTime(
-                futureActivityDate.year,
-                futureActivityDate.month,
-                futureActivityDate.day,
-                int.parse(lecture.endTime.split('h')[0]),
-                int.parse(lecture.endTime.split('h')[1]))) &&
-            futureActivityDate.isAfter(DateTime(
-                futureActivityDate.year,
-                futureActivityDate.month,
-                futureActivityDate.day,
-                int.parse(lecture.startTime.split('h')[0]),
-                int.parse(lecture.startTime.split('h')[1])))) {
+        if (lecture.day == (futureActivityStartDate.weekday - 1)) {
+          if (futureActivityStartDate.isBefore(DateTime(
+                  futureActivityEndDate.year,
+                  futureActivityEndDate.month,
+                  futureActivityEndDate.day,
+                  int.parse(lecture.endTime.split('h')[0]),
+                  int.parse(lecture.endTime.split('h')[1]))) &&
+              futureActivityEndDate.isAfter(DateTime(
+                  futureActivityStartDate.year,
+                  futureActivityStartDate.month,
+                  futureActivityStartDate.day,
+                  int.parse(lecture.startTime.split('h')[0]),
+                  int.parse(lecture.startTime.split('h')[1])))) {
+            return true;
+          }
+        }
+      }
+
+      for (Activity activity in this.widget.activities) {
+        if (futureActivityStartDate.isBefore(activity.endingDate) &&
+            futureActivityEndDate.isAfter(activity.startingDate)) {
           return true;
         }
       }
@@ -364,13 +398,14 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
     }
 
     // Only look up to 5 years ahead
-    final int searchLimit = 5;
+    final DateTime now = DateTime.now();
+    final DateTime searchLimit = DateTime(now.year + 5);
     switch (newActivity.frequency) {
       case Frequency.noRepetition:
         return dateOverlap();
         break;
       case Frequency.everyDay:
-        for (int d = 0; d < searchLimit * 365; d++) {
+        for (int d = 0; newActivity.startingDate.add(Duration(days: d)).isBefore(searchLimit); d++) {
           if (dateOverlap(day: d)) {
             return true;
           }
@@ -378,7 +413,7 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
         return false;
         break;
       case Frequency.everyWeek:
-        for (int d = 0; d < searchLimit * 365; d += 7) {
+        for (int d = 0; newActivity.startingDate.add(Duration(days: d)).isBefore(searchLimit); d += 7) {
           if (dateOverlap(day: d)) {
             return true;
           }
@@ -386,7 +421,7 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
         return false;
         break;
       case Frequency.everyMonth:
-        for (int m = 0; m < searchLimit * 12; m++) {
+        for (int m = 0; DateTime(newActivity.startingDate.year, newActivity.startingDate.month + m).isBefore(searchLimit); m++) {
           if (dateOverlap(month: m)) {
             return true;
           }
@@ -394,7 +429,7 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
         return false;
         break;
       case Frequency.everyYear:
-        for (int y = 0; y < searchLimit; y++) {
+        for (int y = 0; DateTime(newActivity.startingDate.year + y).isBefore(searchLimit); y++) {
           if (dateOverlap(year: y)) {
             return true;
           }
@@ -405,15 +440,6 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
         break;
     }
 
-    /*
-    for(Activity activity in activities) {
-      if(newActivity.startingDate.isBefore(activity.endingDate) &&
-          newActivity.endingDate.isAfter(activity.startingDate)) {
-
-        return true;
-      }
-    }
-    */
     return false;
   }
 }
