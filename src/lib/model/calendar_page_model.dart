@@ -204,7 +204,7 @@ class _CalendarPageState extends SecondaryPageViewState
         return CalendarPageView(
             exams: schedule.item1,
             lectures: schedule.item2,
-            activities: activities,
+            activities: List<Activity>.from(activities),
             limitedActivities: limitedActivities,
             daysOfTheWeek: daysOfTheWeek,
             startDate: weekStartDate,

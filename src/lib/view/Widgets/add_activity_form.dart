@@ -30,7 +30,7 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
   DateTime date;
   TimeOfDay startTime;
   TimeOfDay endTime;
-  Color color;
+  Color color = Colors.transparent;
   Frequency freq;
 
   @override
@@ -98,10 +98,8 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
                   });
                 }
 
-                if (color == null) {
-                  color = Colors.transparent;
-                }
-
+                print('Hello');
+                print(color);
                 final Activity activity = Activity(
                     name: _nameCtrl.text,
                     description: _descCtrl.text,
@@ -112,8 +110,7 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
                     frequency: freq,
                     colorLabel: color
                 );
-                print('Hello');
-                print(activity.colorLabel.toString());
+
                 if (checkForOverlap(activity)) {
                   showDialog(
                       context: context,
@@ -122,7 +119,8 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
                   });
                 } else {
                   Navigator.pop(context);
-                  widget.setActivities(widget.activities.add(activity));
+                  widget.activities.add(activity);
+                  widget.setActivities(widget.activities);
                 }
               },
               child: Text('Accept'))
@@ -259,6 +257,8 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
           if (newValue != null && newValue != color) {
             setState(() {
               color = newValue;
+              print('Hello');
+              print(color);
             });
           }
         });
