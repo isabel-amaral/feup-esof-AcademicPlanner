@@ -98,8 +98,6 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
                   });
                 }
 
-                print('Hello');
-                print(color);
                 final Activity activity = Activity(
                     name: _nameCtrl.text,
                     description: _descCtrl.text,
@@ -257,8 +255,6 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
           if (newValue != null && newValue != color) {
             setState(() {
               color = newValue;
-              print('Hello');
-              print(color);
             });
           }
         });
