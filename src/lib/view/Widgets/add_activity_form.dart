@@ -419,9 +419,9 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
                     .isBefore(searchLimit);
                 d += 7) {
               if (futureActivityStartDate
-                      .isBefore(activity.endingDate.add(Duration(days: day))) &&
+                      .isBefore(activity.endingDate.add(Duration(days: d))) &&
                   futureActivityEndDate.isAfter(
-                      activity.startingDate.add(Duration(days: day)))) {
+                      activity.startingDate.add(Duration(days: d)))) {
                 return true;
               }
             }
