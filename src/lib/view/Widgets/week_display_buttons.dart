@@ -4,7 +4,7 @@ const Color _darkRed = Color.fromARGB(255, 0x75, 0x17, 0x1e);
 
 class WeekDisplayButtons extends StatelessWidget {
   final DateTime currentStartDate;
-  final Function callback;
+  final Function setDates;
 
   final int currentStartDay;
   final int currentStartMonth;
@@ -16,7 +16,7 @@ class WeekDisplayButtons extends StatelessWidget {
         this.currentStartDay,
         this.currentStartMonth,
         this.currentStartYear,
-        @required this.callback}) : super(key: key);
+        @required this.setDates}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class WeekDisplayButtons extends StatelessWidget {
                   onPressed: () {
                     final DateTime previousMonday =
                     currentStartDate.add(Duration(days: -7));
-                    callback(previousMonday);
+                    setDates(previousMonday);
                   }
               ),
               ElevatedButton.icon(
@@ -56,7 +56,7 @@ class WeekDisplayButtons extends StatelessWidget {
                   onPressed: () {
                     final DateTime nextMonday =
                     currentStartDate.add(Duration(days: 7));
-                    callback(nextMonday);
+                    setDates(nextMonday);
                   }
               )
             ]

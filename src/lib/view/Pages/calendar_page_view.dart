@@ -15,23 +15,27 @@ class CalendarPageView extends StatelessWidget {
   final List<Exam> exams;
   final List<Lecture> lectures;
   final List<Activity> activities;
+  final List<Activity> limitedActivities;
   final DateTime startDate;
   final DateTime endDate;
   final List<String> daysOfTheWeek;
   final TabController tabController;
   final ScrollController scrollViewController;
-  final Function callback;
+  final Function setDates;
+  final Function setActivities;
 
   CalendarPageView(
       {Key key,
         @required this.exams,
         @required this.lectures,
         @required this.activities,
+        @required this.limitedActivities,
         @required this.startDate,
         @required this.endDate,
         @required this.daysOfTheWeek,
         @required this.tabController,
-        @required this.callback,
+        @required this.setDates,
+        @required this.setActivities,
         this.scrollViewController});
 
   @override
@@ -48,7 +52,7 @@ class CalendarPageView extends StatelessWidget {
                 PageTitle(name: 'Agenda'),
                 WeekDisplayButtons(
                     currentStartDate: startDate,
-                    callback: callback
+                    setDates: setDates
                 ),
                 TabBar(
                   controller: tabController,
@@ -72,7 +76,8 @@ class CalendarPageView extends StatelessWidget {
               padding: EdgeInsets.all(10),
               child: Align(
                 alignment: Alignment.bottomRight,
-                child: EditWidget(),
+                child: EditWidget(this.exams, this.lectures,
+                    this.activities, this.setActivities),
               )
           )
         ]
@@ -145,7 +150,7 @@ class CalendarPageView extends StatelessWidget {
       }
     }
 
-    for (Activity activity in activities) {
+    for (Activity activity in limitedActivities) {
       if (activity.startingDate.weekday == i+1) {
         dailyActivities.add(ActivitySlot(
           name: activity.name,
@@ -179,6 +184,7 @@ class CalendarPageView extends StatelessWidget {
         ],
       );
     }
+
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
