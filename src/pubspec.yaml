@@ -56,7 +56,7 @@ dev_dependencies:
     sdk: flutter
 
   test: any
-  mockito: 
+  mockito:
   flutter_launcher_icons: ^0.9.0
   flutter_native_splash: ^1.0.3
 
