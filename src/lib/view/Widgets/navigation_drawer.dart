@@ -4,7 +4,7 @@ import '../../utils/constants.dart' as Constants;
 class NavigationDrawer extends StatefulWidget {
   final BuildContext parentContext;
 
-  NavigationDrawer({@required this.parentContext}) {}
+  NavigationDrawer({@required this.parentContext, Key key}) {}
 
   @override
   State<StatefulWidget> createState() {
