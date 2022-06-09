@@ -155,3 +155,31 @@ Feature: Check Schedule Week
       |calendar-page-tab-day-4|  10/6 | 4 |calendar-page-tab-day-4|  13/5 |
       |calendar-page-tab-day-5|  11/6 | 4 |calendar-page-tab-day-5|  14/5 |
       |calendar-page-tab-day-6|  12/6 | 4 |calendar-page-tab-day-6|  15/5 |
+
+  Scenario Outline: Both buttons are pressed (1)
+    Given I expect the "page-title" to be "Área Pessoal"
+    And I open the drawer
+    And I tap the "Agenda" button
+    And I expect the "<tab1>" to be "<date1>"
+    And I pause for 3 seconds
+    When I tap the "next-week-button" button <n1> times
+    And I tap the "previous-week-button" button <n2> times
+    Then I expect the "<tab2>" to be "<date2>"
+
+    Examples:
+      |          tab1         | date1 | n1 | n2 |          tab2         | date2 |
+      |calendar-page-tab-day-0|   6/6 | 1  | 1  |calendar-page-tab-day-0|   6/6 |
+      |calendar-page-tab-day-1|   7/6 | 1  | 1  |calendar-page-tab-day-1|   7/6 |
+      |calendar-page-tab-day-2|   8/6 | 1  | 1  |calendar-page-tab-day-2|   8/6 |
+      |calendar-page-tab-day-0|   6/6 | 2  | 2  |calendar-page-tab-day-0|   6/6 |
+      |calendar-page-tab-day-1|   7/6 | 2  | 2  |calendar-page-tab-day-1|   7/6 |
+      |calendar-page-tab-day-2|   8/6 | 2  | 2  |calendar-page-tab-day-2|   8/6 |
+      |calendar-page-tab-day-0|   6/6 | 3  | 3  |calendar-page-tab-day-0|   6/6 |
+      |calendar-page-tab-day-1|   7/6 | 3  | 3  |calendar-page-tab-day-1|   7/6 |
+      |calendar-page-tab-day-2|   8/6 | 3  | 3  |calendar-page-tab-day-2|   8/6 |
+      |calendar-page-tab-day-0|   6/6 | 2  | 1  |calendar-page-tab-day-0|  13/6 |
+      |calendar-page-tab-day-1|   7/6 | 2  | 1  |calendar-page-tab-day-1|  14/6 |
+      |calendar-page-tab-day-2|   8/6 | 2  | 1  |calendar-page-tab-day-2|  15/6 |
+      |calendar-page-tab-day-0|   6/6 | 1  | 2  |calendar-page-tab-day-0|  30/5 |
+      |calendar-page-tab-day-1|   7/6 | 1  | 2  |calendar-page-tab-day-1|  31/5 |
+      |calendar-page-tab-day-2|   8/6 | 1  | 2  |calendar-page-tab-day-2|   1/6 |
