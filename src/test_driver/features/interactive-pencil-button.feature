@@ -5,7 +5,7 @@ Feature: Interactive Pencil Button
     Given I expect the "page-title" to be "Área Pessoal"
     And I open the drawer
     And I tap the "Agenda" button
-    And I pause for 5 seconds
+    And I pause for 3 seconds
     When I tap the "schedule-edit-button" widget
     Then I expect the button "edit-activity-button" to be present within 5 seconds
 
@@ -13,7 +13,7 @@ Feature: Interactive Pencil Button
     Given I expect the "page-title" to be "Área Pessoal"
     And I open the drawer
     And I tap the "Agenda" button
-    And I pause for 5 seconds
+    And I pause for 3 seconds
     When I tap the "schedule-edit-button" widget
     Then I expect the button "change-visibility-button" to be present within 5 seconds
 
@@ -21,6 +21,6 @@ Feature: Interactive Pencil Button
     Given I expect the "page-title" to be "Área Pessoal"
     And I open the drawer
     And I tap the "Agenda" button
-    And I pause for 5 seconds
+    And I pause for 3 seconds
     When I tap the "schedule-edit-button" widget
     Then I expect the button "add-activity-button" to be present within 5 seconds
