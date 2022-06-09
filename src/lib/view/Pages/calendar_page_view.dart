@@ -68,6 +68,7 @@ class CalendarPageView extends StatelessWidget {
           ),
           Expanded(
             child: TabBarView(
+              key: Key('calendar-tab-bar'),
               controller: tabController,
               children: createSchedule(context),
             ),
