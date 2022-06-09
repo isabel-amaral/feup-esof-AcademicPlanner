@@ -143,9 +143,9 @@ class CalendarPageView extends StatelessWidget {
           end: activity.endingDate,
           color: activity.colorLabel,
           deleteCallback: () => {
-            limitedActivities
-                .removeWhere((element) => element.name == activity.name),
-            setActivities(limitedActivities)
+            activities.removeWhere(
+              (element) => element.name == activity.name),
+            setActivities(activities)
           },
           flags: flags,
         ));
