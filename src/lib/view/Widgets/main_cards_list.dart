@@ -116,6 +116,7 @@ class MainCardsList extends StatelessWidget {
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text(
           Constants.navPersonalArea,
+          key: Key('page-title'),
           style:
               Theme.of(context).textTheme.headline6.apply(fontSizeFactor: 1.3),
         ),

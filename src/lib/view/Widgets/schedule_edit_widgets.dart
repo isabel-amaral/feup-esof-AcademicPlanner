@@ -11,8 +11,9 @@ class EditWidget extends StatefulWidget {
   final List<Lecture> lectures;
   final List<Activity> activities;
   final Function setActivities;
+  final Function toggleFlag;
 
-  EditWidget(this.exams, this.lectures, this.activities, this.setActivities);
+  EditWidget(this.exams, this.lectures, this.activities, this.setActivities, this.toggleFlag);
 
   @override
   _EditWidgetState createState() => _EditWidgetState();
@@ -95,10 +96,14 @@ class _EditWidgetState extends State<EditWidget> {
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return AddActivityDialog(this.widget.exams,
-                      this.widget.lectures, this.widget.activities,
+                  return AddActivityDialog(
+                      this.widget.exams,
+                      this.widget.lectures,
+                      this.widget.activities,
                       this.widget.setActivities);
                 });
+          } else if (key == 'change-visibility-button') {
+            this.widget.toggleFlag('delete');
           }
           if (key == 'edit-activity-button'){
             showDialog(
