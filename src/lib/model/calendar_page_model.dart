@@ -26,10 +26,11 @@ class _CalendarPageState extends SecondaryPageViewState
   TabController tabController;
   ScrollController scrollViewController;
 
-  DateTime weekStartDate = DateTime.now().add(
-      Duration (days: - (DateTime.now().weekday - 1)));
-  DateTime weekEndDate = (DateTime.now().add(
-      Duration (days: - (DateTime.now().weekday - 1)))).add(Duration (days: 6));
+  DateTime weekStartDate =
+      DateTime.now().add(Duration(days: -(DateTime.now().weekday - 1)));
+  DateTime weekEndDate =
+      (DateTime.now().add(Duration(days: -(DateTime.now().weekday - 1))))
+          .add(Duration(days: 6));
   final List<String> daysOfTheWeek = [
     'Segunda',
     'Terça',
@@ -40,8 +41,12 @@ class _CalendarPageState extends SecondaryPageViewState
     'Domingo'
   ];
 
-  void setDates(DateTime start){
-    setState((){
+  Map<String, bool> flags = {
+    'delete': false,
+  };
+
+  void setDates(DateTime start) {
+    setState(() {
       this.weekStartDate = start;
       this.weekEndDate = start.add(Duration(days: 6));
     });
@@ -50,6 +55,12 @@ class _CalendarPageState extends SecondaryPageViewState
   void setActivities(activities) {
     setState(() {
       this.activities = activities;
+    });
+  }
+
+  void toggleFlag(String key) {
+    setState(() {
+      flags[key] = !flags[key];
     });
   }
 
@@ -69,8 +80,7 @@ class _CalendarPageState extends SecondaryPageViewState
   List<Exam> limitExams(exams) {
     final limitedExams = <Exam>[];
     for (Exam exam in exams) {
-      if (exam.date.isAfter(weekStartDate) &&
-          exam.date.isBefore(weekEndDate)) {
+      if (exam.date.isAfter(weekStartDate) && exam.date.isBefore(weekEndDate)) {
         limitedExams.add(exam);
       }
     }
@@ -84,95 +94,89 @@ class _CalendarPageState extends SecondaryPageViewState
           activity.startingDate.isAfter(weekStartDate) &&
           activity.startingDate.isBefore(weekEndDate)) {
         limitedActivities.add(activity);
-      }
-      else if (activity.frequency == Frequency.everyDay) {
+      } else if (activity.frequency == Frequency.everyDay) {
         for (int i = 0; i < daysOfTheWeek.length; i++) {
-          final currentDay = weekStartDate.add(Duration (days: i));
+          final currentDay = weekStartDate.add(Duration(days: i));
           if (activity.startingDate.isBefore(currentDay)) {
             final numDays = currentDay.weekday - activity.startingDate.weekday;
-            limitedActivities.add(
-                Activity(
-                    name: activity.name,
-                    description: activity.description,
-                    startingDate: activity.startingDate.add(Duration (days: numDays)),
-                    endingDate: activity.endingDate.add(Duration (days: numDays)),
-                    colorLabel: activity.colorLabel
-                ));
-          }
-        }
-      }
-      else if (activity.frequency == Frequency.everyWeek &&
-              (activity.startingDate.isBefore(weekStartDate) ||
-              (activity.startingDate.isAfter(weekStartDate) &&
-              (activity.startingDate.isBefore(weekEndDate))))) {
-        final DateTime startingWeek =
-        activity.startingDate.add(Duration (days: - (activity.startingDate.weekday - 1)));
-        final numDays = weekStartDate.difference(startingWeek).inDays;
-        limitedActivities.add(
-            Activity(
+            limitedActivities.add(Activity(
                 name: activity.name,
                 description: activity.description,
-                startingDate: activity.startingDate.add(Duration (days: numDays)),
-                endingDate: activity.endingDate.add(Duration (days: numDays)),
-                colorLabel: activity.colorLabel
-            ));
-      }
-      else if (activity.frequency == Frequency.everyMonth &&
-              (activity.startingDate.isBefore(weekStartDate) ||
+                startingDate:
+                    activity.startingDate.add(Duration(days: numDays)),
+                endingDate: activity.endingDate.add(Duration(days: numDays)),
+                colorLabel: activity.colorLabel));
+          }
+        }
+      } else if (activity.frequency == Frequency.everyWeek &&
+          (activity.startingDate.isBefore(weekStartDate) ||
               (activity.startingDate.isAfter(weekStartDate) &&
                   (activity.startingDate.isBefore(weekEndDate))))) {
-
+        final DateTime startingWeek = activity.startingDate
+            .add(Duration(days: -(activity.startingDate.weekday - 1)));
+        final numDays = weekStartDate.difference(startingWeek).inDays;
+        limitedActivities.add(Activity(
+            name: activity.name,
+            description: activity.description,
+            startingDate: activity.startingDate.add(Duration(days: numDays)),
+            endingDate: activity.endingDate.add(Duration(days: numDays)),
+            colorLabel: activity.colorLabel));
+      } else if (activity.frequency == Frequency.everyMonth &&
+          (activity.startingDate.isBefore(weekStartDate) ||
+              (activity.startingDate.isAfter(weekStartDate) &&
+                  (activity.startingDate.isBefore(weekEndDate))))) {
         DateTime currentMonth = activity.startingDate;
         while (!currentMonth.isAfter(weekEndDate)) {
-          final DateTime currentMonthStartWeek = currentMonth.add(
-              Duration (days: - (DateTime.now().weekday - 1)));
+          final DateTime currentMonthStartWeek =
+              currentMonth.add(Duration(days: -(DateTime.now().weekday - 1)));
           if ((currentMonthStartWeek.isAfter(weekStartDate) ||
-              (currentMonthStartWeek.year == weekStartDate.year &&
-                  currentMonthStartWeek.month == weekStartDate.month &&
-                  currentMonthStartWeek.day == weekStartDate.day)) &&
+                  (currentMonthStartWeek.year == weekStartDate.year &&
+                      currentMonthStartWeek.month == weekStartDate.month &&
+                      currentMonthStartWeek.day == weekStartDate.day)) &&
               currentMonthStartWeek.isBefore(weekEndDate)) {
-            limitedActivities.add(
-                Activity(
-                    name: activity.name,
-                    description: activity.description,
-                    startingDate: currentMonth,
-                    endingDate: DateTime(currentMonth.year,
-                        currentMonth.month, currentMonth.day,
-                        activity.endingDate.hour, activity.endingDate.minute),
-                    colorLabel: activity.colorLabel
-                ));
+            limitedActivities.add(Activity(
+                name: activity.name,
+                description: activity.description,
+                startingDate: currentMonth,
+                endingDate: DateTime(
+                    currentMonth.year,
+                    currentMonth.month,
+                    currentMonth.day,
+                    activity.endingDate.hour,
+                    activity.endingDate.minute),
+                colorLabel: activity.colorLabel));
             break;
           }
-          currentMonth = currentMonth.add(Duration (days: 28));
+          currentMonth = currentMonth.add(Duration(days: 28));
         }
-      }
-      else if (activity.frequency == Frequency.everyYear &&
-              (activity.startingDate.isBefore(weekStartDate) ||
+      } else if (activity.frequency == Frequency.everyYear &&
+          (activity.startingDate.isBefore(weekStartDate) ||
               (activity.startingDate.isAfter(weekStartDate) &&
                   (activity.startingDate.isBefore(weekEndDate))))) {
-
         DateTime currentYear = activity.startingDate;
-        while(!currentYear.isAfter(weekEndDate)) {
-          final DateTime currentYearStartWeek = currentYear.add(
-              Duration (days: - (DateTime.now().weekday - 1)));
+        while (!currentYear.isAfter(weekEndDate)) {
+          final DateTime currentYearStartWeek =
+              currentYear.add(Duration(days: -(DateTime.now().weekday - 1)));
           if ((currentYearStartWeek.isAfter(weekStartDate) ||
-              (currentYearStartWeek.year == weekStartDate.year &&
-                  currentYearStartWeek.month == weekStartDate.month &&
-                  currentYearStartWeek.day == weekStartDate.day)) &&
+                  (currentYearStartWeek.year == weekStartDate.year &&
+                      currentYearStartWeek.month == weekStartDate.month &&
+                      currentYearStartWeek.day == weekStartDate.day)) &&
               currentYearStartWeek.isBefore(weekEndDate)) {
-            limitedActivities.add(
-                Activity(
-                    name: activity.name,
-                    description: activity.description,
-                    startingDate: currentYear,
-                    endingDate: DateTime(currentYear.year,
-                        currentYear.month, currentYear.day,
-                        activity.endingDate.hour, activity.endingDate.minute),
-                    colorLabel: activity.colorLabel
-                ));
+            limitedActivities.add(Activity(
+                name: activity.name,
+                description: activity.description,
+                startingDate: currentYear,
+                endingDate: DateTime(
+                    currentYear.year,
+                    currentYear.month,
+                    currentYear.day,
+                    activity.endingDate.hour,
+                    activity.endingDate.minute),
+                colorLabel: activity.colorLabel));
             break;
           }
-          currentYear = DateTime(currentYear.year+1, currentYear.month, currentYear.day);
+          currentYear = DateTime(
+              currentYear.year + 1, currentYear.month, currentYear.day);
         }
       }
     }
@@ -197,8 +201,8 @@ class _CalendarPageState extends SecondaryPageViewState
   Widget getBody(BuildContext context) {
     return StoreConnector<AppState, Tuple2<List<Exam>, List<Lecture>>>(
       converter: (store) {
-        final DateTime monday = DateTime.now().add(
-            Duration (days: - (DateTime.now().weekday - 1)));
+        final DateTime monday =
+            DateTime.now().add(Duration(days: -(DateTime.now().weekday - 1)));
         tabController.animateTo(0);
         if (monday.day == weekStartDate.day &&
             monday.month == weekStartDate.month &&
@@ -209,32 +213,33 @@ class _CalendarPageState extends SecondaryPageViewState
 
         final List<Exam> exams = store.state.content['exams'];
         final Map<String, bool> filteredExamTypes =
-          store.state.content['filteredExams'];
-        final List<Exam> filteredExams = limitExams(
-            exams.where((exam) =>
-            filteredExamTypes[Exam.getExamTypeLong(exam.examType)] ?? true)
-                .toList()
-        );
+            store.state.content['filteredExams'];
+        final List<Exam> filteredExams = limitExams(exams
+            .where((exam) =>
+                filteredExamTypes[Exam.getExamTypeLong(exam.examType)] ?? true)
+            .toList());
 
         final List<Lecture> lectures =
-          limitLectures(store.state.content['schedule']);
+            limitLectures(store.state.content['schedule']);
 
         return Tuple2(filteredExams, lectures);
       },
       builder: (context, schedule) {
         final List<Activity> limitedActivities = limitActivities(activities);
         return CalendarPageView(
-            exams: schedule.item1,
-            lectures: schedule.item2,
-            activities: List<Activity>.from(activities),
-            limitedActivities: limitedActivities,
-            daysOfTheWeek: daysOfTheWeek,
-            startDate: weekStartDate,
-            endDate: weekEndDate,
-            tabController: tabController,
-            scrollViewController: scrollViewController,
-            setDates: setDates,
-            setActivities: setActivities
+          exams: schedule.item1,
+          lectures: schedule.item2,
+          activities: List<Activity>.from(activities),
+          limitedActivities: limitedActivities,
+          daysOfTheWeek: daysOfTheWeek,
+          startDate: weekStartDate,
+          endDate: weekEndDate,
+          flags: flags,
+          tabController: tabController,
+          scrollViewController: scrollViewController,
+          setDates: setDates,
+          setActivities: setActivities,
+          toggleFlag: toggleFlag,
         );
       },
     );
