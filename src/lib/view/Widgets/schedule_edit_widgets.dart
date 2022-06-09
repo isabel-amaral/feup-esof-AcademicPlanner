@@ -100,6 +100,16 @@ class _EditWidgetState extends State<EditWidget> {
                       this.widget.setActivities);
                 });
           }
+          if (key == 'edit-activity-button'){
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AddActivityDialog(this.widget.exams,
+                    this.widget.lectures, this.widget.activities,
+                    this.widget.setActivities);
+              }
+            );
+          }
         },
       ),
     );
