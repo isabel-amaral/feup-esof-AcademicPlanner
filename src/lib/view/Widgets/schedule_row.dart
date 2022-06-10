@@ -12,6 +12,10 @@ class ScheduleRow extends StatelessWidget {
   final DateTime date;
   final String teacher;
   final String type;
+  final bool isHidden;
+  final VoidCallback hideCallback;
+  final VoidCallback unhideCallback;
+  final Map<String, bool> flags;
 
   ScheduleRow(
       {Key key,
@@ -19,6 +23,11 @@ class ScheduleRow extends StatelessWidget {
       @required this.rooms,
       @required this.begin,
       @required this.end,
+      this.isHidden = true,
+      @required this.hideCallback,
+      @required this.unhideCallback,
+      @required this.flags =
+        const {'delete': false},
       this.date,
       this.teacher,
       this.type})
@@ -62,7 +71,9 @@ class ScheduleRow extends StatelessWidget {
               margin: EdgeInsets.only(top: 60.0, bottom: 45.0),
               child: ScheduleEventRectangle(
                   subject: this.subject, type: this.type)),
-          Container(
+          flags['delete'] ?
+          createExamHideButton()
+              : Container(
               margin: EdgeInsets.only(top: 12.0, bottom: 12.0),
               child: Column(
                   key: Key(roomsKey),
@@ -109,5 +120,24 @@ class ScheduleRow extends StatelessWidget {
       startDate: date.add(Duration(hours: hoursBegin, minutes: minutesBegin)),
       endDate: date.add(Duration(hours: hoursEnd, minutes: minutesEnd)),
     );
+  }
+
+  Widget createExamHideButton() {
+    if (isHidden){
+      return IconButton(
+          visualDensity: VisualDensity.compact,
+          icon: Icon(Icons.remove_red_eye),
+          onPressed: unhideCallback
+      );
+    }
+
+    else {
+      return IconButton(
+          visualDensity: VisualDensity.compact,
+          icon: Icon(Icons.visibility_off ),
+          onPressed: hideCallback
+      );
+    }
+
   }
 }

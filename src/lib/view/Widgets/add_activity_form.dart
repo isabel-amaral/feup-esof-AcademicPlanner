@@ -31,7 +31,8 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
   TimeOfDay startTime;
   TimeOfDay endTime;
   Color color = Colors.transparent;
-  Frequency freq;
+  Frequency freq = Frequency.noRepetition;
+  String dropdownValue = 'Não repetir';
 
   @override
   void dispose() {
@@ -89,6 +90,7 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
               },
               child: Text('Cancel')),
           TextButton(
+              key: Key('confirm-activity'),
               onPressed: () {
                 if (checkForMissingValues()) {
                   showDialog(
@@ -126,7 +128,14 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
   }
 
   Widget createTextField(String labelText, String hintText) {
+    String key;
+    if (labelText == 'Nome') {
+      key = 'activity-name';
+    } else {
+      key = 'activity-description';
+    }
     return TextFormField(
+      key: Key(key),
       cursorColor: _darkRed,
       controller: labelText == 'Nome' ? _nameCtrl : _descCtrl,
       decoration: formFieldDecoration(hintText, labelText),
@@ -135,6 +144,7 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
 
   Widget createDateField(BuildContext context) {
     return TextFormField(
+      key: Key('activity-date'),
       enableInteractiveSelection: false,
       controller: _dateCtrl,
       onTap: () async {
@@ -156,6 +166,7 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
 
   Widget createStartTimeField() {
     return TextFormField(
+      key: Key('activity-start-time'),
       enableInteractiveSelection: false,
       controller: _startTimeCtrl,
       onTap: () async {
@@ -175,6 +186,7 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
 
   Widget createEndTimeField() {
     return TextFormField(
+      key: Key('activity-end-time'),
       enableInteractiveSelection: false,
       controller: _endTimeCtrl,
       onTap: () async {
@@ -194,7 +206,9 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
 
   Widget createFrequencyField(BuildContext context) {
     return DropdownButtonFormField(
-        decoration: formFieldDecoration('Escolhe uma frequência', 'Frequência'),
+        key: Key('activity-frequency'),
+        value: dropdownValue,
+        decoration: formFieldDecoration(dropdownValue, 'Frequência'),
         items: <String>[
           'Não repetir',
           'Todos os dias',
@@ -202,7 +216,21 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
           'Todos os meses',
           'Todos os anos'
         ].map<DropdownMenuItem<String>>((String value) {
+          String key;
+          if (value == 'Não repetir') {
+            key = 'noRepetition-option';
+          } else if (value == 'Todos os dias') {
+            key = 'everyDay-option';
+          } else if (value == 'Todas as semanas') {
+            key = 'everyWeek-option';
+          } else if (value == 'Todos os meses') {
+            key = 'everyMonth-option';
+          } else if (value == 'Todos os anos') {
+            key = 'everyYear-option';
+          }
+
           return DropdownMenuItem<String>(
+            key: Key(key),
             value: value,
             child: Text(value),
           );
@@ -212,18 +240,23 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
             setState(() {
               switch (newValue) {
                 case 'Não repetir':
+                  dropdownValue = 'Não repetir';
                   freq = Frequency.noRepetition;
                   break;
                 case 'Todos os dias':
+                  dropdownValue = 'Todos os dias';
                   freq = Frequency.everyDay;
                   break;
                 case 'Todas as semanas':
+                  dropdownValue = 'Todas as semanas';
                   freq = Frequency.everyWeek;
                   break;
                 case 'Todos os meses':
+                  dropdownValue = 'Todos os meses';
                   freq = Frequency.everyMonth;
                   break;
                 case 'Todos os anos':
+                  dropdownValue = 'Todos os anos';
                   freq = Frequency.everyYear;
                   break;
                 default:
@@ -236,6 +269,7 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
 
   Widget createColorField(BuildContext context) {
     return DropdownButtonFormField(
+        key: Key('activity-color'),
         decoration: formFieldDecoration('Escolhe uma cor', 'Cor'),
         items: <Color>[
           Colors.yellow,

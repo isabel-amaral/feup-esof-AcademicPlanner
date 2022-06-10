@@ -39,6 +39,7 @@ class ActivitySlot extends StatelessWidget {
 
   Widget createActivitySlotRow(context) {
     return Container(
+        key: Key(name),
         margin: EdgeInsets.only(top: 3.0, bottom: 3.0),
         child: Row(
           mainAxisSize: MainAxisSize.max,
