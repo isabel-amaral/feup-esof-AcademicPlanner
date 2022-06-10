@@ -9,6 +9,7 @@ import 'package:uni/view/Widgets/schedule_edit_widgets.dart';
 import 'package:uni/view/Widgets/schedule_row.dart';
 import 'package:uni/view/Widgets/schedule_slot.dart';
 import 'package:uni/view/Widgets/week_display_buttons.dart';
+import '../Widgets/edit_activity_form.dart';
 
 const Color _darkRed = Color.fromARGB(255, 0x75, 0x17, 0x1e);
 
@@ -28,6 +29,7 @@ class CalendarPageView extends StatelessWidget {
   final Function setDates;
   final Function setActivities;
   final Function toggleFlag;
+  final Function offFlag;
   final Function setHiddenExams;
   final Function setHiddenLectures;
 
@@ -47,6 +49,7 @@ class CalendarPageView extends StatelessWidget {
       @required this.setDates,
       @required this.setActivities,
       @required this.toggleFlag,
+      @required this.offFlag,
       @required this.setHiddenExams,
       @required this.setHiddenLectures,
       this.scrollViewController});
@@ -82,7 +85,7 @@ class CalendarPageView extends StatelessWidget {
           child: Align(
             alignment: Alignment.bottomRight,
             child: EditWidget(this.exams, this.lectures, this.activities,
-                this.setActivities, this.toggleFlag),
+                this.setActivities, this.toggleFlag, this.offFlag),
           ))
     ]);
   }
@@ -187,9 +190,20 @@ class CalendarPageView extends StatelessWidget {
           color: activity.colorLabel,
           deleteCallback: () => {
             activities.removeWhere(
-              (element) => element.name == activity.name),
+              (element) => element.name == activity.name
+                  && element.description == activity.description
+                  && element.startingDate == element.startingDate),
             setActivities(activities),
             toggleFlag('delete'),
+          },
+          editCallback: () =>{
+            showDialog(context: context,
+                builder: (BuildContext context) {
+                  return EditActivityDialog(this.exams,
+                      this.lectures, this.activities,
+                      this.setActivities, activity);
+                }),
+            toggleFlag('edit'),
           },
           flags: flags,
         ));
