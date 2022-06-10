@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:uni/model/entities/activity.dart';
 import 'package:uni/model/entities/exam.dart';
 import 'package:uni/model/entities/lecture.dart';
@@ -16,6 +17,8 @@ class CalendarPageView extends StatelessWidget {
   final List<Lecture> lectures;
   final List<Activity> activities;
   final List<Activity> limitedActivities;
+  final List<Exam> hiddenExams;
+  final List<Lecture> hiddenLectures;
   final DateTime startDate;
   final DateTime endDate;
   final List<String> daysOfTheWeek;
@@ -25,6 +28,8 @@ class CalendarPageView extends StatelessWidget {
   final Function setDates;
   final Function setActivities;
   final Function toggleFlag;
+  final Function setHiddenExams;
+  final Function setHiddenLectures;
 
   CalendarPageView(
       {Key key,
@@ -32,6 +37,8 @@ class CalendarPageView extends StatelessWidget {
       @required this.lectures,
       @required this.activities,
       @required this.limitedActivities,
+      @required this.hiddenExams,
+      @required this.hiddenLectures,
       @required this.startDate,
       @required this.endDate,
       @required this.daysOfTheWeek,
@@ -40,6 +47,8 @@ class CalendarPageView extends StatelessWidget {
       @required this.setDates,
       @required this.setActivities,
       @required this.toggleFlag,
+      @required this.setHiddenExams,
+      @required this.setHiddenLectures,
       this.scrollViewController});
 
   @override
@@ -120,19 +129,53 @@ class CalendarPageView extends StatelessWidget {
     return tabBarViewContent;
   }
 
+  bool isHiddenExam(Exam exam) {
+    for (Exam hidden in hiddenExams) {
+      if (hidden.subject == exam.subject
+          && hidden.begin == exam.begin
+          && hidden.end == exam.end
+          && hidden.date == exam.date) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool isHiddenLecture(Lecture lecture) {
+    for (Lecture hidden in hiddenLectures) {
+      if (hidden.subject == lecture.subject && hidden.startTime == lecture.startTime
+          && hidden.endTime == lecture.endTime && hidden.day == lecture.day) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   Widget createDailySchedule(BuildContext context, int i) {
     final List<Widget> dailyActivities = [];
 
-    for (Exam exam in exams) {
-      if (exam.weekDay == daysOfTheWeek[i]) {
-        dailyActivities.add(ScheduleRow(
-            subject: exam.subject,
-            rooms: exam.rooms,
-            begin: exam.begin,
-            end: exam.end,
-            type: exam.examType));
+      for (Exam exam in exams) {
+        if (exam.weekDay == daysOfTheWeek[i] && (flags['delete'] || !isHiddenExam(exam))){
+          dailyActivities.add(ScheduleRow(
+              subject: exam.subject,
+              rooms: exam.rooms,
+              begin: exam.begin,
+              end: exam.end,
+              type: exam.examType,
+              unhideCallback : () => {
+                hiddenExams.
+                removeWhere((element) => element.subject == exam.subject
+                    && element.begin == exam.begin && element.end == exam.end),
+                setHiddenExams(hiddenExams)
+              },
+              hideCallback: () => {
+                hiddenExams.add(exam),
+                setHiddenExams(hiddenExams)
+              },
+              flags: flags,
+              isHidden: isHiddenExam(exam)));
+        }
       }
-    }
 
     for (Activity activity in limitedActivities) {
       if (activity.startingDate.weekday == i + 1) {
@@ -154,7 +197,7 @@ class CalendarPageView extends StatelessWidget {
     }
 
     for (Lecture lecture in lectures) {
-      if (lecture.day == i) {
+      if (lecture.day == i && (flags['delete'] || !isHiddenLecture(lecture))) {
         dailyActivities.add(ScheduleSlot(
             subject: lecture.subject,
             typeClass: lecture.typeClass,
@@ -162,7 +205,21 @@ class CalendarPageView extends StatelessWidget {
             begin: lecture.startTime,
             end: lecture.endTime,
             teacher: lecture.teacher,
-            classNumber: lecture.classNumber));
+            classNumber: lecture.classNumber,
+            unhideCallback: () => {
+              hiddenLectures.
+              removeWhere((element) => element.subject == lecture.subject
+                  && element.startTime == lecture.startTime
+                  && element.endTime == lecture.endTime
+                  && element.day == lecture.day),
+              setHiddenLectures(hiddenLectures)
+            },
+            hideCallback: () => {
+              hiddenLectures.add(lecture),
+              setHiddenLectures(hiddenLectures)
+            },
+            flags: flags,
+            isHidden: isHiddenLecture(lecture)));
       }
     }
 

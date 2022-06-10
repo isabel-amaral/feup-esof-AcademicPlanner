@@ -10,6 +10,10 @@ class ScheduleSlot extends StatelessWidget {
   final String teacher;
   final String typeClass;
   final String classNumber;
+  final bool isHidden;
+  final VoidCallback hideCallback;
+  final VoidCallback unhideCallback;
+  final Map<String, bool> flags;
 
   ScheduleSlot({
     Key key,
@@ -18,6 +22,11 @@ class ScheduleSlot extends StatelessWidget {
     @required this.rooms,
     @required this.begin,
     @required this.end,
+    this.isHidden = true,
+    @required this.hideCallback,
+    @required this.unhideCallback,
+    @required this.flags =
+    const {'delete': false},
     this.teacher,
     this.classNumber,
   }) : super(key: key);
@@ -90,7 +99,8 @@ class ScheduleSlot extends StatelessWidget {
           )
         ],
       ),
-      createScheduleSlotPrimInfoColumn(roomTextField)
+      flags['delete'] ? createLectureHideButton() :
+        createScheduleSlotPrimInfoColumn(roomTextField)
     ];
   }
 
@@ -120,5 +130,23 @@ class ScheduleSlot extends StatelessWidget {
 
   Widget createScheduleSlotPrimInfoColumn(elements) {
     return Container(child: elements);
+  }
+
+  Widget createLectureHideButton() {
+    if (isHidden){
+      return IconButton(
+          visualDensity: VisualDensity.compact,
+          icon: Icon(Icons.remove_red_eye),
+          onPressed: unhideCallback
+      );
+    }
+
+    else {
+      return IconButton(
+          visualDensity: VisualDensity.compact,
+          icon: Icon(Icons.visibility_off ),
+          onPressed: hideCallback
+      );
+    }
   }
 }
