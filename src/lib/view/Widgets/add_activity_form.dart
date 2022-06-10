@@ -31,7 +31,8 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
   TimeOfDay startTime;
   TimeOfDay endTime;
   Color color = Colors.transparent;
-  Frequency freq;
+  Frequency freq = Frequency.noRepetition;
+  String dropdownValue = 'Não repetir';
 
   @override
   void dispose() {
@@ -206,7 +207,8 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
   Widget createFrequencyField(BuildContext context) {
     return DropdownButtonFormField(
         key: Key('activity-frequency'),
-        decoration: formFieldDecoration('Escolhe uma frequência', 'Frequência'),
+        value: dropdownValue,
+        decoration: formFieldDecoration(dropdownValue, 'Frequência'),
         items: <String>[
           'Não repetir',
           'Todos os dias',
@@ -214,7 +216,21 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
           'Todos os meses',
           'Todos os anos'
         ].map<DropdownMenuItem<String>>((String value) {
+          String key;
+          if (value == 'Não repetir') {
+            key = 'noRepetition-option';
+          } else if (value == 'Todos os dias') {
+            key = 'everyDay-option';
+          } else if (value == 'Todas as semanas') {
+            key = 'everyWeek-option';
+          } else if (value == 'Todos os meses') {
+            key = 'everyMonth-option';
+          } else if (value == 'Todos os anos') {
+            key = 'everyYear-option';
+          }
+
           return DropdownMenuItem<String>(
+            key: Key(key),
             value: value,
             child: Text(value),
           );
@@ -224,18 +240,23 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
             setState(() {
               switch (newValue) {
                 case 'Não repetir':
+                  dropdownValue = 'Não repetir';
                   freq = Frequency.noRepetition;
                   break;
                 case 'Todos os dias':
+                  dropdownValue = 'Todos os dias';
                   freq = Frequency.everyDay;
                   break;
                 case 'Todas as semanas':
+                  dropdownValue = 'Todas as semanas';
                   freq = Frequency.everyWeek;
                   break;
                 case 'Todos os meses':
+                  dropdownValue = 'Todos os meses';
                   freq = Frequency.everyMonth;
                   break;
                 case 'Todos os anos':
+                  dropdownValue = 'Todos os anos';
                   freq = Frequency.everyYear;
                   break;
                 default:
