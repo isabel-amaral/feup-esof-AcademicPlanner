@@ -23,6 +23,8 @@ class _CalendarPageState extends SecondaryPageViewState
   final CreateActivities createActivities = CreateActivities();
   List<Activity> activities;
 
+  List<Exam> hiddenExams = <Exam>[];
+
   TabController tabController;
   ScrollController scrollViewController;
 
@@ -55,6 +57,12 @@ class _CalendarPageState extends SecondaryPageViewState
   void setActivities(activities) {
     setState(() {
       this.activities = activities;
+    });
+  }
+
+  void setHiddenExams(hiddenExams) {
+    setState(() {
+      this.hiddenExams = hiddenExams;
     });
   }
 
@@ -231,6 +239,7 @@ class _CalendarPageState extends SecondaryPageViewState
           lectures: schedule.item2,
           activities: List<Activity>.from(activities),
           limitedActivities: limitedActivities,
+          hiddenExams : hiddenExams,
           daysOfTheWeek: daysOfTheWeek,
           startDate: weekStartDate,
           endDate: weekEndDate,
@@ -240,6 +249,7 @@ class _CalendarPageState extends SecondaryPageViewState
           setDates: setDates,
           setActivities: setActivities,
           toggleFlag: toggleFlag,
+          setHiddenExams : setHiddenExams,
         );
       },
     );

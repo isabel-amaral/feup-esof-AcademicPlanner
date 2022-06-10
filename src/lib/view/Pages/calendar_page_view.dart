@@ -16,6 +16,7 @@ class CalendarPageView extends StatelessWidget {
   final List<Lecture> lectures;
   final List<Activity> activities;
   final List<Activity> limitedActivities;
+  final List<Exam> hiddenExams;
   final DateTime startDate;
   final DateTime endDate;
   final List<String> daysOfTheWeek;
@@ -25,6 +26,7 @@ class CalendarPageView extends StatelessWidget {
   final Function setDates;
   final Function setActivities;
   final Function toggleFlag;
+  final Function setHiddenExams;
 
   CalendarPageView(
       {Key key,
@@ -32,6 +34,7 @@ class CalendarPageView extends StatelessWidget {
       @required this.lectures,
       @required this.activities,
       @required this.limitedActivities,
+      @required this.hiddenExams,
       @required this.startDate,
       @required this.endDate,
       @required this.daysOfTheWeek,
@@ -40,6 +43,7 @@ class CalendarPageView extends StatelessWidget {
       @required this.setDates,
       @required this.setActivities,
       @required this.toggleFlag,
+      @required this.setHiddenExams,
       this.scrollViewController});
 
   @override
@@ -120,19 +124,41 @@ class CalendarPageView extends StatelessWidget {
     return tabBarViewContent;
   }
 
+  bool isHiddenExam(Exam exam) {
+    for (Exam hidden in hiddenExams) {
+      if (hidden.subject == exam.subject && hidden.begin == exam.begin
+          && hidden.end == exam.end) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   Widget createDailySchedule(BuildContext context, int i) {
     final List<Widget> dailyActivities = [];
 
-    for (Exam exam in exams) {
-      if (exam.weekDay == daysOfTheWeek[i]) {
-        dailyActivities.add(ScheduleRow(
-            subject: exam.subject,
-            rooms: exam.rooms,
-            begin: exam.begin,
-            end: exam.end,
-            type: exam.examType));
+      for (Exam exam in exams) {
+        if (exam.weekDay == daysOfTheWeek[i] && (flags['delete'] || !isHiddenExam(exam))){
+          dailyActivities.add(ScheduleRow(
+              subject: exam.subject,
+              rooms: exam.rooms,
+              begin: exam.begin,
+              end: exam.end,
+              type: exam.examType,
+              unhideCallback : () => {
+                hiddenExams.
+                removeWhere((element) => element.subject == exam.subject
+                    && element.begin == exam.begin && element.end == exam.end),
+                setHiddenExams(hiddenExams)
+              },
+              hideCallback: () => {
+                hiddenExams.add(exam),
+                setHiddenExams(hiddenExams)
+              },
+              flags: flags,
+              isHidden: isHiddenExam(exam)));
+        }
       }
-    }
 
     for (Activity activity in limitedActivities) {
       if (activity.startingDate.weekday == i + 1) {
