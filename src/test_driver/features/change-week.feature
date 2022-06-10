@@ -10,8 +10,8 @@ Feature: Check Schedule Week
     When I tap the "next-week-button" button
     Then I expect the "<tab2>" to be "<date2>"
 
+    # 6/06 week: change date1 to current week's values
     Examples:
-      # 6/06 week: change date1 to current week's values
       |            tab1         | date1 |            tab2         | date2 |
       | calendar-page-tab-day-0 | 6/6   | calendar-page-tab-day-0 | 13/6  |
       | calendar-page-tab-day-1 | 7/6   | calendar-page-tab-day-1 | 14/6  |
@@ -54,8 +54,8 @@ Feature: Check Schedule Week
     When I tap the "next-week-button" button <n> times
     Then I expect the "<tab2>" to be "<date2>"
 
+    # 6/06 week: change date1 to current week's values
     Examples:
-      # 6/06 week: change date1 to current week's values
       |          tab1         | date1 | n |          tab2       | date2 |
       |calendar-page-tab-day-0|  6/6  | 2 |calendar-page-tab-day-0|  20/6 |
       |calendar-page-tab-day-1|  7/6  | 2 |calendar-page-tab-day-1|  21/6 |
@@ -88,8 +88,8 @@ Feature: Check Schedule Week
     When I tap the "previous-week-button" button
     Then I expect the "<tab2>" to be "<date2>"
 
+    # 6/06 week: change date1 to current week's values
     Examples:
-      # 6/06 week: change date1 to current week's values
       |          tab1         | date1 |          tab2         | date2 |
       | calendar-page-tab-day-0 | 6/6   | calendar-page-tab-day-0 | 30/5  |
       | calendar-page-tab-day-1 | 7/6   | calendar-page-tab-day-1 | 31/5  |
@@ -131,8 +131,8 @@ Feature: Check Schedule Week
     When I tap the "next-week-button" button <n> times
     Then I expect the "<tab2>" to be "<date2>"
 
+    # 6/06 week: change date1 to current week's values
     Examples:
-      # 6/06 week: change date1 to current week's values
       |          tab1         | date1 | n |          tab2         | date2 |
       |calendar-page-tab-day-0|  6/6  | 2 |calendar-page-tab-day-0|  23/5 |
       |calendar-page-tab-day-1|  7/6  | 2 |calendar-page-tab-day-1|  24/5 |
