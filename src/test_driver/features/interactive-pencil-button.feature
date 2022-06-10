@@ -6,7 +6,7 @@ Feature: Interactive Pencil Button
     And I open the drawer
     And I tap the "Agenda" button
     And I pause for 3 seconds
-    When I tap the "schedule-edit-button" widget
+    When I tap the "schedule-edit-button" button
     Then I expect the button "edit-activity-button" to be present within 5 seconds
 
   Scenario: Tap the 'Pencil' button and see the 'Alterar Visibilidade' button
@@ -14,7 +14,7 @@ Feature: Interactive Pencil Button
     And I open the drawer
     And I tap the "Agenda" button
     And I pause for 3 seconds
-    When I tap the "schedule-edit-button" widget
+    When I tap the "schedule-edit-button" button
     Then I expect the button "change-visibility-button" to be present within 5 seconds
 
   Scenario: Tap the 'Pencil' button and see the 'Adicionar Evento' button
@@ -22,5 +22,5 @@ Feature: Interactive Pencil Button
     And I open the drawer
     And I tap the "Agenda" button
     And I pause for 3 seconds
-    When I tap the "schedule-edit-button" widget
+    When I tap the "schedule-edit-button" button
     Then I expect the button "add-activity-button" to be present within 5 seconds
