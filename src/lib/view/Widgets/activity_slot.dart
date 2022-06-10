@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uni/view/Widgets/row_container.dart';
 
+import 'add_activity_form.dart';
+
 class ActivitySlot extends StatelessWidget {
   final String name;
   final String description;
@@ -10,6 +12,7 @@ class ActivitySlot extends StatelessWidget {
   final DateTime end;
   final Color color;
   final VoidCallback deleteCallback;
+  final VoidCallback editCallback;
   final Map<String, bool> flags;
 
   ActivitySlot({
@@ -20,6 +23,7 @@ class ActivitySlot extends StatelessWidget {
     @required this.end,
     @required this.color,
     @required this.deleteCallback,
+    @required this.editCallback,
     @required this.flags,
   }) : super(key: key);
 
@@ -83,9 +87,11 @@ class ActivitySlot extends StatelessWidget {
         Row(children: [nameTextField]),
         Row(children: [descriptionTextField])
       ]),
-      flags['delete'] ? 
+      flags['delete'] ?
         createActivityDeleteButton()
-        : createActivitySlotColor(),
+        : flags['edit']?
+        createActivityEditButton(context)
+          :createActivitySlotColor(),
     ];
   }
 
@@ -94,6 +100,15 @@ class ActivitySlot extends StatelessWidget {
       visualDensity: VisualDensity.compact,
       icon: Icon(Icons.delete),
       onPressed: deleteCallback,
+    );
+  }
+
+  Widget createActivityEditButton(BuildContext context) {
+
+    return IconButton(
+      visualDensity: VisualDensity.compact,
+      icon: Icon(Icons.edit),
+      onPressed: editCallback,
     );
   }
 

@@ -43,6 +43,7 @@ class _CalendarPageState extends SecondaryPageViewState
 
   Map<String, bool> flags = {
     'delete': false,
+    'edit': false,
   };
 
   void setDates(DateTime start) {
@@ -61,6 +62,12 @@ class _CalendarPageState extends SecondaryPageViewState
   void toggleFlag(String key) {
     setState(() {
       flags[key] = !flags[key];
+    });
+  }
+
+  void offFlag(String key) {
+    setState(() {
+      flags[key] = false;
     });
   }
 
@@ -240,6 +247,7 @@ class _CalendarPageState extends SecondaryPageViewState
           setDates: setDates,
           setActivities: setActivities,
           toggleFlag: toggleFlag,
+          offFlag: offFlag,
         );
       },
     );
