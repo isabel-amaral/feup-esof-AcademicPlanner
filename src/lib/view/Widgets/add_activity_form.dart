@@ -126,7 +126,14 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
   }
 
   Widget createTextField(String labelText, String hintText) {
+    String key;
+    if (labelText == 'Nome') {
+      key = 'activity-name';
+    } else {
+      key = 'activity-description';
+    }
     return TextFormField(
+      key: Key(key),
       cursorColor: _darkRed,
       controller: labelText == 'Nome' ? _nameCtrl : _descCtrl,
       decoration: formFieldDecoration(hintText, labelText),
@@ -135,6 +142,7 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
 
   Widget createDateField(BuildContext context) {
     return TextFormField(
+      key: Key('activity-date'),
       enableInteractiveSelection: false,
       controller: _dateCtrl,
       onTap: () async {
@@ -156,6 +164,7 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
 
   Widget createStartTimeField() {
     return TextFormField(
+      key: Key('activity-start-time'),
       enableInteractiveSelection: false,
       controller: _startTimeCtrl,
       onTap: () async {
@@ -175,6 +184,7 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
 
   Widget createEndTimeField() {
     return TextFormField(
+      key: Key('activity-end-time'),
       enableInteractiveSelection: false,
       controller: _endTimeCtrl,
       onTap: () async {
@@ -194,6 +204,7 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
 
   Widget createFrequencyField(BuildContext context) {
     return DropdownButtonFormField(
+        key: Key('activity-frequency'),
         decoration: formFieldDecoration('Escolhe uma frequência', 'Frequência'),
         items: <String>[
           'Não repetir',
@@ -236,6 +247,7 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
 
   Widget createColorField(BuildContext context) {
     return DropdownButtonFormField(
+        key: Key('activity-color'),
         decoration: formFieldDecoration('Escolhe uma cor', 'Cor'),
         items: <Color>[
           Colors.yellow,
