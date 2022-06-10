@@ -89,6 +89,7 @@ class _AddActivityDialogState extends State<AddActivityDialog> {
               },
               child: Text('Cancel')),
           TextButton(
+              key: Key('confirm-activity'),
               onPressed: () {
                 if (checkForMissingValues()) {
                   showDialog(
