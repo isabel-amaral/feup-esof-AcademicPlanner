@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:uni/model/entities/activity.dart';
 import 'package:uni/model/entities/exam.dart';
 import 'package:uni/model/entities/lecture.dart';
@@ -130,8 +131,10 @@ class CalendarPageView extends StatelessWidget {
 
   bool isHiddenExam(Exam exam) {
     for (Exam hidden in hiddenExams) {
-      if (hidden.subject == exam.subject && hidden.begin == exam.begin
-          && hidden.end == exam.end) {
+      if (hidden.subject == exam.subject
+          && hidden.begin == exam.begin
+          && hidden.end == exam.end
+          && hidden.date == exam.date) {
         return true;
       }
     }
