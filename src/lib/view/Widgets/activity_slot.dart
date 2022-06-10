@@ -9,6 +9,8 @@ class ActivitySlot extends StatelessWidget {
   final DateTime begin;
   final DateTime end;
   final Color color;
+  final VoidCallback deleteCallback;
+  final Map<String, bool> flags;
 
   ActivitySlot({
     Key key,
@@ -17,19 +19,22 @@ class ActivitySlot extends StatelessWidget {
     @required this.begin,
     @required this.end,
     @required this.color,
+    @required this.deleteCallback,
+    @required this.flags,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return RowContainer(
         child: Container(
-          padding: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 22.0, right: 22.0),
-          child: createActivitySlotRow(context),
-        ));
+      padding:
+          EdgeInsets.only(top: 10.0, bottom: 10.0, left: 22.0, right: 22.0),
+      child: createActivitySlotRow(context),
+    ));
   }
 
   Widget createActivitySlotRow(context) {
-    return  Container(
+    return Container(
         margin: EdgeInsets.only(top: 3.0, bottom: 3.0),
         child: Row(
           mainAxisSize: MainAxisSize.max,
@@ -45,15 +50,17 @@ class ActivitySlot extends StatelessWidget {
       TextAlign.center);
 
   Widget createScheduleSlotTime(context) {
-    return  Column(
+    return Column(
       children: <Widget>[
         createActivityTime(
-            DateFormat('HH').format(this.begin)+'h'+
-            DateFormat('mm').format(this.begin),
+            DateFormat('HH').format(this.begin) +
+                'h' +
+                DateFormat('mm').format(this.begin),
             context),
         createActivityTime(
-            DateFormat('HH').format(this.end)+'h'+
-            DateFormat('mm').format(this.end),
+            DateFormat('HH').format(this.end) +
+                'h' +
+                DateFormat('mm').format(this.end),
             context),
       ],
     );
@@ -72,34 +79,32 @@ class ActivitySlot extends StatelessWidget {
 
     return [
       createScheduleSlotTime(context),
-      Column (
-          children: <Widget> [
-            Row(
-                children: [
-                  nameTextField
-                ]
-            ),
-            Row (
-                children: [
-                  descriptionTextField
-                ]
-            )
-          ]
-      ),
-      createActivitySlotColor()
+      Column(children: <Widget>[
+        Row(children: [nameTextField]),
+        Row(children: [descriptionTextField])
+      ]),
+      flags['delete'] ? 
+        createActivityDeleteButton()
+        : createActivitySlotColor(),
     ];
+  }
+
+  Widget createActivityDeleteButton() {
+    return IconButton(
+      visualDensity: VisualDensity.compact,
+      icon: Icon(Icons.delete),
+      onPressed: deleteCallback,
+    );
   }
 
   Widget createActivitySlotColor() {
     return Container(
-        margin: EdgeInsets.only(left:10, right: 10),
-        width: 10,
-        height: 40,
-        decoration:
-          BoxDecoration(
-              borderRadius: BorderRadiusDirectional.all(Radius.circular(50)),
-              color: this.color
-          ),
+      margin: EdgeInsets.only(left: 10, right: 10),
+      width: 10,
+      height: 40,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadiusDirectional.all(Radius.circular(50)),
+          color: this.color),
     );
   }
 
@@ -110,5 +115,4 @@ class ActivitySlot extends StatelessWidget {
       style: style,
     );
   }
-
 }
