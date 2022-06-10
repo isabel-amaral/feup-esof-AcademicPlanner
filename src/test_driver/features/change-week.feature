@@ -128,7 +128,7 @@ Feature: Check Schedule Week
     And I tap the "Agenda" button
     And I expect the "<tab1>" to be "<date1>"
     And I pause for 3 seconds
-    When I tap the "next-week-button" button <n> times
+    When I tap the "previous-week-button" button <n> times
     Then I expect the "<tab2>" to be "<date2>"
 
     # 6/06 week: change date1 to current week's values
