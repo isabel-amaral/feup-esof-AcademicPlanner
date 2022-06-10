@@ -32,7 +32,7 @@ We learned to work better with flutter, which will help us in future iterations.
 
 - Start of iteration:
 <p align="center" justify="center">
-  <img src="Iteration%232/start1.jpeg"/>
+  <img src="Iteration%232/start.jpeg"/>
 </p>
 <p align="center" justify="center">
   <img src="Iteration%232/start2.jpeg"/>
@@ -64,10 +64,7 @@ Because of the technical problems with both firebase and running the acceptance 
 
 - Start of iteration:
 <p align="center" justify="center">
-  <img src="Iteration%233/start1.jpeg"/>
-</p>
-<p align="center" justify="center">
-  <img src="Iteration%233/start2.jpeg"/>
+  <img src="Iteration%233/start.jpeg"/>
 </p>
 
 - End of iteration:
