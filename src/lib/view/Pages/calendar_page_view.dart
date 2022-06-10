@@ -19,70 +19,63 @@ class CalendarPageView extends StatelessWidget {
   final DateTime startDate;
   final DateTime endDate;
   final List<String> daysOfTheWeek;
+  final Map<String, bool> flags;
   final TabController tabController;
   final ScrollController scrollViewController;
   final Function setDates;
   final Function setActivities;
+  final Function toggleFlag;
 
   CalendarPageView(
       {Key key,
-        @required this.exams,
-        @required this.lectures,
-        @required this.activities,
-        @required this.limitedActivities,
-        @required this.startDate,
-        @required this.endDate,
-        @required this.daysOfTheWeek,
-        @required this.tabController,
-        @required this.setDates,
-        @required this.setActivities,
-        this.scrollViewController});
+      @required this.exams,
+      @required this.lectures,
+      @required this.activities,
+      @required this.limitedActivities,
+      @required this.startDate,
+      @required this.endDate,
+      @required this.daysOfTheWeek,
+      @required this.flags,
+      @required this.tabController,
+      @required this.setDates,
+      @required this.setActivities,
+      @required this.toggleFlag,
+      this.scrollViewController});
 
   @override
   Widget build(BuildContext context) {
     final MediaQueryData queryData = MediaQuery.of(context);
     final Color labelColor = Color.fromARGB(255, 0x50, 0x50, 0x50);
 
-    return Column(
-        children: [
-          ListView(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              children: [
-                PageTitle(name: 'Agenda'),
-                WeekDisplayButtons(
-                    currentStartDate: startDate,
-                    setDates: setDates
-                ),
-                TabBar(
-                  controller: tabController,
-                  unselectedLabelColor: labelColor,
-                  labelColor: labelColor,
-                  isScrollable: true,
-                  indicatorWeight: 3.0,
-                  indicatorColor: _darkRed,
-                  labelPadding: EdgeInsets.all(0.0),
-                  tabs: createTabs(queryData, context),
-                )
-              ]
-          ),
-          Expanded(
-            child: TabBarView(
-              key: Key('calendar-tab-bar'),
-              controller: tabController,
-              children: createSchedule(context),
-            ),
-          ),
-          Container(
-              padding: EdgeInsets.all(10),
-              child: Align(
-                alignment: Alignment.bottomRight,
-                child: EditWidget(this.exams, this.lectures,
-                    this.activities, this.setActivities),
-              )
-          )
-        ]
-    );
+    return Column(children: [
+      ListView(scrollDirection: Axis.vertical, shrinkWrap: true, children: [
+        PageTitle(name: 'Agenda'),
+        WeekDisplayButtons(currentStartDate: startDate, setDates: setDates),
+        TabBar(
+          controller: tabController,
+          unselectedLabelColor: labelColor,
+          labelColor: labelColor,
+          isScrollable: true,
+          indicatorWeight: 3.0,
+          indicatorColor: _darkRed,
+          labelPadding: EdgeInsets.all(0.0),
+          tabs: createTabs(queryData, context),
+        )
+      ]),
+      Expanded(
+        child: TabBarView(
+          controller: tabController,
+          children: createSchedule(context),
+        ),
+      ),
+      Container(
+          padding: EdgeInsets.all(10),
+          child: Align(
+            alignment: Alignment.bottomRight,
+            child: EditWidget(this.exams, this.lectures, this.activities,
+                this.setActivities, this.toggleFlag),
+          ))
+    ]);
   }
 
   List<Widget> createTabs(MediaQueryData queryData, BuildContext context) {
@@ -97,32 +90,22 @@ class CalendarPageView extends StatelessWidget {
         width: queryData.size.width * 1 / 3,
         decoration: BoxDecoration(
             color: Theme.of(context).backgroundColor,
-            border: Border(
-                bottom: BorderSide(
-                    width: 0.7,
-                    color: _darkRed
-                )
-            )
-        ),
+            border: Border(bottom: BorderSide(width: 0.7, color: _darkRed))),
         child: Tab(
-            child: Column(
-                children: [
-                  Padding(
-                      padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
-                      child: Text(daysOfTheWeek[currentDay.weekday-1],
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                          key: Key('calendar-page-tab-weekday-$i'))
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
-                    child: Text(currentDay.day.toString() + '/' + currentDay.month.toString(),
-                        key: Key('calendar-page-tab-day-$i')),
-                  )
-                ]
-            )
-        ),
-      )
-      );
+            child: Column(children: [
+          Padding(
+              padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
+              child: Text(daysOfTheWeek[currentDay.weekday - 1],
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                  key: Key('calendar-page-tab-weekday-$i'))),
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
+            child: Text(
+                currentDay.day.toString() + '/' + currentDay.month.toString(),
+                key: Key('calendar-page-tab-day-$i')),
+          )
+        ])),
+      ));
       currentDay = currentDay.add(Duration(days: 1));
       i++;
     }
@@ -152,13 +135,20 @@ class CalendarPageView extends StatelessWidget {
     }
 
     for (Activity activity in limitedActivities) {
-      if (activity.startingDate.weekday == i+1) {
+      if (activity.startingDate.weekday == i + 1) {
         dailyActivities.add(ActivitySlot(
           name: activity.name,
           description: activity.description,
           begin: activity.startingDate,
           end: activity.endingDate,
           color: activity.colorLabel,
+          deleteCallback: () => {
+            activities.removeWhere(
+              (element) => element.name == activity.name),
+            setActivities(activities),
+            toggleFlag('delete'),
+          },
+          flags: flags,
         ));
       }
     }
@@ -187,10 +177,9 @@ class CalendarPageView extends StatelessWidget {
     }
 
     return SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: dailyActivities,
-      )
-    );
+        child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: dailyActivities,
+    ));
   }
 }
