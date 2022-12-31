@@ -1,4 +1,4 @@
-## 2LEICT3 - Academic Planner
+## 2LEICT3 - Academic Planner 
 
 > **2021/2022** - 2nd Year, 2nd Semester
 >
